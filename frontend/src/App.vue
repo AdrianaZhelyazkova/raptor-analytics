@@ -1,28 +1,55 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <main-menu @navigate="navigate" @logout="handleLogout"></main-menu>
+    <router-view></router-view>
+    <!-- <login-form v-if="!loggedIn" @login="handleLogin" @register="handleRegister"></login-form> -->
+    <!-- <div v-else>
+      <p>Welcome, {{ email }}!</p>
+    </div> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MainMenu from './components/MainMenu.vue';
 
 export default {
-  name: 'App',
+  data() {
+    return {
+      loggedIn: false,
+      email: '',
+    };
+  },
+  methods: {
+    // handleLogin() {
+    //   this.loggedIn = true;
+    //   this.email = "";
+    // },
+    // handleRegister() {
+    //   this.loggedIn = true;
+    //   this.email = "";
+    // },
+    // handleLogout() {
+    //   this.loggedIn = false;
+    //   this.email = '';
+    // },
+    navigate(page) {
+      alert(`Navigate to ${page}`);
+    },
+  },
   components: {
-    HelloWorld
-  }
-}
+    // 'login-form': LoginForm,
+    'main-menu': MainMenu,
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
 </style>

@@ -1,0 +1,64 @@
+<template>
+    <div class="main-menu">
+        <div class="banner">Raptor Analytics</div>
+        <ul>
+            <router-link to="/machines">
+                <li>Machines</li>
+            </router-link>
+            <router-link to="/user-profile">
+                <li>User Profile</li>
+            </router-link>
+            <router-link to="/">
+                <li>Logout</li>
+            </router-link>
+        </ul>
+    </div>
+</template>
+  
+<script>
+export default {
+    methods: {
+        navigate(page) {
+            this.$router.push(page);
+        },
+        logout() {
+            this.$emit('logout');
+        },
+    },
+};
+</script>
+  
+<style scoped>
+.main-menu {
+    background-color: #9c27b0;
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.banner {
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+li {
+    cursor: pointer;
+    color: #fff;
+}
+
+li:hover {
+    text-decoration: underline;
+}
+</style>
