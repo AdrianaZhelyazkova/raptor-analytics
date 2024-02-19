@@ -17,6 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from analytics.views import EventListCreateView, MachineListCreateView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('machines/', MachineListCreateView.as_view(), name='machine-list-create'),
+    path('events/', EventListCreateView.as_view(), name='event-list-create'),
 ]
