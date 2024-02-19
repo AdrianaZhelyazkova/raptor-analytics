@@ -29,7 +29,7 @@ export default {
             this.$emit('login');
         },
         register() {
-            this.$emit('register');
+            this.$router.push('/register');
         },
     },
 };
