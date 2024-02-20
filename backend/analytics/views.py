@@ -1,11 +1,11 @@
-from rest_framework import generics
+from rest_framework import viewsets
 from .models import Machine, Event
 from .serializers import MachineSerializer, EventSerializer
 
-class MachineListCreateView(generics.ListCreateAPIView):
+class MachineViewSet(viewsets.ModelViewSet):
     queryset = Machine.objects.all()
     serializer_class = MachineSerializer
 
-class EventListCreateView(generics.ListCreateAPIView):
+class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer

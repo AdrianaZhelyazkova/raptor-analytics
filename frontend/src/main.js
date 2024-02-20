@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm.vue';
 import RegisterUser from './components/RegisterUser.vue';
 import MachinesList from './components/MachinesList.vue';
 import UserProfile from './components/UserProfile.vue';
+import MachineDetails from './components/MachineDetails.vue';
 
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
@@ -14,6 +15,7 @@ const routes = [
   { path: '/register', component: RegisterUser },
   { path: '/machines', component: MachinesList },
   { path: '/user-profile', component: UserProfile },
+  { path: '/machine-details/:id', name: 'machine-details', component: MachineDetails },
 ];
 
 const router = new VueRouter({
