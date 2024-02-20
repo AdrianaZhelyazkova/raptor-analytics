@@ -1,7 +1,6 @@
-<!-- MachineDetails.vue -->
 <template>
     <div class="machine-details">
-      <h2>{{ isNewMachine ? 'Register New Machine' : 'Machine Details' }}</h2>
+      <h2>{{ isNewMachine ? 'Register New Machine' : 'Edit Machine' }}</h2>
       <form @submit.prevent="saveMachineDetails">
         <div class="form-group">
           <label for="machineName">Machine Name:</label>
@@ -18,13 +17,14 @@
           <input type="text" v-model="machine.product_type" id="product_type" required>
         </div>
   
-        <button type="submit">{{ isNewMachine ? 'Register Machine' : 'Save' }}</button>
+        <button type="submit">{{ isNewMachine ? 'Register Machine' : 'Save Changes' }}</button>
       </form>
     </div>
   </template>
   
   <script>
   import axios from 'axios';
+  
   export default {
     data() {
       return {
@@ -64,11 +64,21 @@
             console.error('Error updating machine details:', error);
           });
       },
+      fetchMachineDetails() {
+        axios.get(`http://localhost:8000/api/machines/${this.$route.params.id}/`)
+          .then(response => {
+            this.machine = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching machine details:', error);
+          });
+      },
     },
     created() {
       this.isNewMachine = this.$route.params.id === 'new';
   
       if (!this.isNewMachine) {
+        this.fetchMachineDetails();
       }
     },
   };
@@ -106,4 +116,3 @@
     cursor: pointer;
   }
   </style>
-  
