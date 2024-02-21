@@ -3,11 +3,11 @@
         <h2>Login</h2>
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="text" v-model="email" id="email" placeholder="Enter your email">
+            <input type="text" v-model="loginData.username" id="email" placeholder="Enter your email">
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" v-model="password" id="password" placeholder="Enter your password">
+            <input type="password" v-model="loginData.password" id="password" placeholder="Enter your password">
         </div>
         <div class="form-group">
             <button @click="login">Login</button>
@@ -17,16 +17,27 @@
 </template>
   
 <script>
+import axios from 'axios';
 export default {
     data() {
         return {
-            email: '',
-            password: '',
+            loginData: {
+                username: '',
+                password: '',
+            },
         };
     },
     methods: {
         login() {
-            this.$emit('login');
+            console.log(this.loginData)
+            axios.post('http://localhost:8000/api/users/login/', this.loginData)
+                .then(response => {
+                    console.log('User logged in successfully:', response.data);
+                    this.$router.push('/user-profile');
+                })
+                .catch(error => {
+                    console.error('Error logging in user:', error);
+                });
         },
         register() {
             this.$router.push('/register');
