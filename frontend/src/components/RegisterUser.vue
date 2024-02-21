@@ -4,22 +4,22 @@
         <form @submit.prevent="registerUser">
             <div class="form-group">
                 <label for="firstName">First name:</label>
-                <input type="text" v-model="firstName" id="firstName" required>
+                <input type="text" v-model="userData.first_name" id="firstName" required>
             </div>
 
             <div class="form-group">
                 <label for="lastName">Last name:</label>
-                <input type="text" v-model="lastName" id="lastName" required>
+                <input type="text" v-model="userData.last_name" id="lastName" required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" v-model="email" id="email" required>
+                <input type="email" v-model="userData.username" id="email" required>
             </div>
 
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" v-model="password" id="password" required>
+                <input type="password" v-model="userData.password" id="password" required>
             </div>
 
             <div class="form-group">
@@ -30,27 +30,29 @@
 </template>
   
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
+            userData: {
+                first_name: '',
+                last_name: '',
+                username: '',
+                password: '',
+            },
         };
     },
     methods: {
         registerUser() {
-            console.log('User registered:', {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.email,
-                password: this.password,
-            });
-            this.firstName = '';
-            this.lastName = '';
-            this.email = '';
-            this.password = '';
+            axios.post('http://localhost:8000/api/users/', this.userData)
+                .then(response => {
+                    console.log('User registered successfully:', response.data);
+                    this.$router.push('/machines');
+                })
+                .catch(error => {
+                    console.error('Error registering user:', error);
+                });
         },
     },
 };
