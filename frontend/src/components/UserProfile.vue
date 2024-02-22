@@ -43,7 +43,7 @@ export default {
                     Authorization: `Token ${token}`,
                 }
             };
-            axios.put('http://localhost:8000/api/users/' + this.user.id + '/', this.user, config)
+            axios.put(`http://localhost:8000/api/users/${this.user.id}/`, this.user, config)
                 .then(response => {
                     this.user = { ...response.data.user };
                     alert('User profile updated successfully!');

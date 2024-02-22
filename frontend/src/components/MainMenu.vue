@@ -14,6 +14,7 @@
 </template>
   
 <script>
+import axios from 'axios';
 import Cookies from 'js-cookie';
 
 export default {
@@ -22,8 +23,14 @@ export default {
             this.$router.push(page);
         },
         logout() {
-            Cookies.remove('auth_token');
-            this.$router.push('/');
+            axios.post('http://localhost:8000/api/users/logout/')
+                .then(() => {
+                    Cookies.remove('auth_token');
+                    this.$router.push('/');
+                })
+                .catch(error => {
+                    console.error('Error logging in user:', error);
+                });
         },
     },
 };

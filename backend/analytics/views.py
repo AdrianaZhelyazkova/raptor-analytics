@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -37,12 +37,28 @@ class UserViewSet(viewsets.ModelViewSet):
         currentUser = UserSerializer(user)
         return Response({'user':currentUser.data}, status=status.HTTP_200_OK)
     
+    @action(detail=False, methods=['post'])
+    def logout(self, request):
+        logout(request)
+        return Response({'detail': "Logged out successfully"})
+     
     
 class MachineViewSet(viewsets.ModelViewSet):
     queryset = Machine.objects.all()
     serializer_class = MachineSerializer
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
+    
+    @action(detail=True, methods=['post'])
+    def add_event(self, request, pk=None):
+        machine = self.get_object()
+        event_serializer = EventSerializer(data=request.data)
+        if event_serializer.is_valid():
+            event = event_serializer.save()
+            machine.events.add(event)
+            machine_serializer = self.get_serializer(machine)
+            return Response(machine_serializer.data, status=201)
+        return Response(event_serializer.errors, status=400)
     
 
 class EventViewSet(viewsets.ModelViewSet):
