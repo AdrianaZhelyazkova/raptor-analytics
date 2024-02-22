@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 class MachineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Machine
-        fields = ['id', 'name', 'os', 'product_type']
+        fields = ['id', 'name', 'os', 'product_type', 'events']
         
 
 class EventSerializer(serializers.ModelSerializer):
