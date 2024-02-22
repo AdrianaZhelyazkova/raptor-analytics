@@ -36,6 +36,7 @@
   
 <script>
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default {
     data() {
@@ -68,7 +69,13 @@ export default {
             this.$router.push({ name: 'machine-details', params: { id: 'new' } });
         },
         fetchMachines() {
-            axios.get('http://localhost:8000/api/machines/')
+            const token = Cookies.get('auth_token');
+            const config = {
+                headers: {
+                    Authorization: `Token ${token}`,
+                }
+            };
+            axios.get('http://localhost:8000/api/machines/', config)
                 .then(response => {
                     this.machines = response.data;
                 })

@@ -8,21 +8,22 @@
             <router-link to="/user-profile">
                 <li>User Profile</li>
             </router-link>
-            <router-link to="/">
-                <li>Logout</li>
-            </router-link>
+            <li @click="logout">Logout</li>
         </ul>
     </div>
 </template>
   
 <script>
+import Cookies from 'js-cookie';
+
 export default {
     methods: {
         navigate(page) {
             this.$router.push(page);
         },
         logout() {
-            this.$emit('logout');
+            Cookies.remove('auth_token');
+            this.$router.push('/');
         },
     },
 };

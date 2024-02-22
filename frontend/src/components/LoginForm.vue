@@ -18,6 +18,8 @@
   
 <script>
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
 export default {
     data() {
         return {
@@ -29,11 +31,13 @@ export default {
     },
     methods: {
         login() {
-            console.log(this.loginData)
             axios.post('http://localhost:8000/api/users/login/', this.loginData)
                 .then(response => {
-                    console.log('User logged in successfully:', response.data);
-                    this.$router.push('/user-profile');
+                    const token = response.data.token;
+                    Cookies.set('auth_token', token, {expires: 1})
+                    this.$store.dispatch('login').then(() => {
+                        this.$router.push('/user-profile');
+                    });
                 })
                 .catch(error => {
                     console.error('Error logging in user:', error);

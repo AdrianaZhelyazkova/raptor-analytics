@@ -6,6 +6,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import Machine, Event
 from .serializers import MachineSerializer, EventSerializer, UserSerializer
 
@@ -13,6 +15,7 @@ from .serializers import MachineSerializer, EventSerializer, UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    
     
     @action(detail=False, methods=['post'], authentication_classes=[SessionAuthentication, BasicAuthentication], permission_classes=[AllowAny])
     def login(self, request):
@@ -26,13 +29,24 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({'token': token.key})
         else:
             return Response({"error': 'Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        
+    @action(detail=False, methods=['GET'])
+    def current_user(self, request):
+        user = request.user
+        currentUser = UserSerializer(user)
+        return Response({'user':currentUser.data}, status=status.HTTP_200_OK)
     
     
 class MachineViewSet(viewsets.ModelViewSet):
     queryset = Machine.objects.all()
     serializer_class = MachineSerializer
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
     
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
