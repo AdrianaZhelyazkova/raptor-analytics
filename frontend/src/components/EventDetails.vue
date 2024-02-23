@@ -42,10 +42,11 @@ export default {
         return {
             event: {
                 name: '',
-                startingPoint: '',
-                finalPoint: '',
+                starting_point: '',
+                final_point: '',
                 duration: null,
             },
+            machineId: null,
         };
     },
     methods: {
@@ -54,29 +55,34 @@ export default {
             this.resetForm();
         },
         addEvent() {
+            const eventData = {
+                ...this.event,
+                machine: this.$route.params.id
+            };
             const token = Cookies.get('auth_token');
             const config = {
                 headers: {
                     Authorization: `Token ${token}`,
                 }
             };
-            axios.post('http://localhost:8000/api/events/', this.event, config)
-            .then(response => {
-                const newEventId = response.data.id;
-                this.$emit('add-event', newEventId);
-            }) 
-            .catch(error => {
-                console.log(error);
-                this.closeModal();
-            })
+            axios.post('http://localhost:8000/api/events/', eventData, config)
+                .then(() => {
+                    this.$emit('add-event', this.event);
+                    this.closeModal()
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.closeModal();
+                })
         },
         resetForm() {
             this.event = {
                 name: '',
-                startingPoint: '',
-                finalPoint: '',
+                starting_point: '',
+                final_point: '',
                 duration: null,
             };
+            this.machineId = null;
         },
     },
 };

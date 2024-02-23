@@ -49,17 +49,6 @@ class MachineViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
     
-    @action(detail=True, methods=['post'])
-    def add_event(self, request, pk=None):
-        machine = self.get_object()
-        event_serializer = EventSerializer(data=request.data)
-        if event_serializer.is_valid():
-            event = event_serializer.save()
-            machine.events.add(event)
-            machine_serializer = self.get_serializer(machine)
-            return Response(machine_serializer.data, status=201)
-        return Response(event_serializer.errors, status=400)
-    
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()

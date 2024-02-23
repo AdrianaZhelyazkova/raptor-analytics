@@ -15,14 +15,17 @@ class UserSerializer(serializers.ModelSerializer):
         Token.objects.create(user=user)
         return user
     
-    
-class MachineSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Machine
-        fields = ['id', 'name', 'os', 'product_type', 'events']
         
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ['id', 'name', 'starting_point', 'final_point', 'duration']
+        fields = ['id', 'name', 'starting_point', 'final_point', 'duration', 'machine']
+        
+
+class MachineSerializer(serializers.ModelSerializer):
+    events = EventSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Machine
+        fields = ['id', 'name', 'os', 'product_type', 'events']
