@@ -17,27 +17,8 @@
         <input type="text" v-model="machine.product_type" id="product_type" required>
       </div>
 
-      <div>
-        <h3>Events</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Starting Point</th>
-              <th>Final Point</th>
-              <th>Duration</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="event in machine.events" :key="event.id">
-              <td>{{ event.name }}</td>
-              <td>{{ event.starting_point }}</td>
-              <td>{{ event.final_point }}</td>
-              <td>{{ event.duration }}</td>
-              <td><button @click="deleteEvent(event.id)">Delete</button></td>
-            </tr>
-          </tbody>
-        </table>
+      <div v-if="!isNewMachine">
+        <machine-events v-if="machine.events.length > 0" :events="machine.events" />
 
         <button type="button" @click="openModal">Add Event</button>
 
@@ -54,10 +35,12 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import EventDetails from './EventDetails.vue';
+import MachineEvents from './MachineEvents.vue'
 
 export default {
   components: {
-    EventDetails
+    EventDetails,
+    MachineEvents,
   },
   data() {
     return {
@@ -73,7 +56,6 @@ export default {
   },
   methods: {
     openModal() {
-      console.log("aaaa")
       this.isModalOpen = true;
     },
     closeModal() {

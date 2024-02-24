@@ -21,7 +21,16 @@
                     <td>{{ machine.os }}</td>
                     <td>{{ machine.product_type }}</td>
                     <td>
-                        <button @click="deregisterMachine(machine.id)">X</button>
+                        <div v-if="machine.events.length > 0">
+                            <div v-if="selectedMachineId === machine.id">
+                                <button @click="viewMachineEvents(machine.id)">Hide Events</button>
+                                <machine-events :events="machine.events"></machine-events>
+                            </div>
+                            <span v-else>
+                                <button @click="viewMachineEvents(machine.id)">View Events</button>
+                            </span>
+                        </div>
+                        <span v-else>No events</span>
                     </td>
                     <td>
                         <button @click="deregisterMachine(machine.id)">X</button>
@@ -37,12 +46,17 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import MachineEvents from './MachineEvents.vue';
 
 export default {
+    components: {
+        MachineEvents,
+    },
     data() {
         return {
-            machines: [], 
-            searchQuery: '', 
+            machines: [],
+            searchQuery: '',
+            selectedMachineId: null,
         };
     },
     methods: {
@@ -51,11 +65,20 @@ export default {
         viewMachineDetails(machineId) {
             this.$router.push({ name: 'machine-details', params: { id: machineId } });
         },
+        viewMachineEvents(machineId) {
+            this.selectedMachineId = this.selectedMachineId === machineId ? null : machineId;
+        },
         deregisterMachine(machineId) {
             const confirmDeletion = confirm('Are you sure you want to deregister this machine?');
 
             if (confirmDeletion) {
-                axios.delete(`http://localhost:8000/api/machines/${machineId}/`)
+                const token = Cookies.get('auth_token');
+                const config = {
+                    headers: {
+                        Authorization: `Token ${token}`,
+                    }
+                };
+                axios.delete(`http://localhost:8000/api/machines/${machineId}/`, config)
                     .then(response => {
                         console.log('Machine deregistered:', response.data);
                         this.fetchMachines();
