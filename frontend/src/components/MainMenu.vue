@@ -5,6 +5,9 @@
             <router-link to="/machines">
                 <li>Machines</li>
             </router-link>
+            <router-link to="/events">
+                <li>Events</li>
+            </router-link>
             <router-link to="/user-profile">
                 <li>User Profile</li>
             </router-link>

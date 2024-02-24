@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Avg, Q
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -55,3 +56,39 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
+    
+    @action(detail=False, methods=['GET'])
+    def query_events(self, request):
+        event_name = request.query_params.get('event_name', None)
+        starting_point = request.query_params.get('starting_point', None)
+        final_point = request.query_params.get('final_point', None)
+        machine_os = request.query_params.get('machine_os', None)
+        product_type = request.query_params.get('product_type', None)
+
+        filters = Q()
+        if event_name:
+            filters &= Q(name=event_name)
+        if starting_point:
+            filters &= Q(starting_point=starting_point)
+        if final_point:
+            filters &= Q(final_point=final_point)
+        if machine_os:
+            filters &= Q(machine__os=machine_os)
+        if product_type:
+            filters &= Q(machine__product_type=product_type)
+
+        queried_events = Event.objects.filter(filters)
+
+        if queried_events.exists():
+            mean_duration = queried_events.aggregate(Avg('duration'))['duration__avg']
+        else:
+            mean_duration = None
+
+        serializer = EventSerializer(queried_events, many=True)
+
+        response_data = {
+            'queried_events': serializer.data,
+            'mean_duration': mean_duration,
+        }
+
+        return Response(response_data)
