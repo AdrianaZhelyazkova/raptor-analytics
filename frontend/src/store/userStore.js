@@ -7,7 +7,7 @@ const token = Cookies.get('auth_token');
                     Authorization: `Token ${token}`,
                 }
             };
-            
+
 export default {
     namespaced: true,
 
@@ -30,6 +30,7 @@ export default {
         async login({ commit }) {
             await axios.get('http://localhost:8000/api/users/current_user/', config)
                 .then(response => {
+                    console.log(response)
                     commit('setUser', response.data.user);
                 });
         },

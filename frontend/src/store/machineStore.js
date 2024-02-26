@@ -13,12 +13,17 @@ export default {
 
   state: {
     machines: [],
+    machine: null,
   },
 
   mutations: {
     setMachines(state, machines) {
       state.machines = machines;
     },
+
+    setCurrentMachine(state, machine) {
+      state.machine = machine;
+    }
   },
 
   actions: {
@@ -28,6 +33,15 @@ export default {
         commit('setMachines', response.data);
       } catch (error) {
         console.error('Error fetching machines:', error);
+      }
+    },
+
+    async getCurrentMachine({commit}, id){
+      try {
+        const response = await axios.get(`http://localhost:8000/api/machines/${id}`, config);
+        commit('setCurrentMachine', response.data);
+      } catch (error) {
+        console.error('Error fetching current machine:', error);
       }
     },
 
@@ -48,7 +62,7 @@ export default {
         console.error('Error updating machine:', error);
       }
     },
-    
+
     async deleteMachine({ dispatch }, machineId) {
       try {
         await axios.delete(`http://localhost:8000/api/machines/${machineId}/`, config);
@@ -64,5 +78,6 @@ export default {
     getMachineById: (state) => (id) => {
       return state.machines.find(machine => machine.id === id);
     },
+    getCurrentMachine: state => state.machine,
   },
 };

@@ -83,17 +83,18 @@ export default {
       this.$router.push('/machines');
     },
     async saveExistingMachine() {
-      await this.$store.dispatch('machine/updateMachine', {id:this.$route.params.id, machineData: this.machine});
+      await this.$store.dispatch('machine/updateMachine', { id: this.$route.params.id, machineData: this.machine });
     },
     async fetchMachineDetails() {
-      this.machine = await this.$store.getters['machine/getMachineById'](this.$route.params.id);
-    },
+      await this.$store.dispatch('machine/getCurrentMachine', this.$route.params.id);
+      this.machine = await this.$store.getters['machine/getCurrentMachine'];
+    }
   },
-  created() {
+  async created() {
     this.isNewMachine = this.$route.params.id === 'new';
 
     if (!this.isNewMachine) {
-      this.fetchMachineDetails();
+      await this.fetchMachineDetails();
     }
   },
 };
