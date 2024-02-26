@@ -21,7 +21,7 @@ class Machine(models.Model):
 
 class Event(models.Model):
     NAME_CHOICES = [
-        ('Installation', 'Backout'),
+        ('Installation', 'Installation'),
         ('Backout', 'Backout'),
     ]
     
