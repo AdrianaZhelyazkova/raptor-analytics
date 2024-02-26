@@ -48,6 +48,7 @@ export default {
             axios.post('http://localhost:8000/api/users/', this.userData)
                 .then(response => {
                     console.log('User registered successfully:', response.data);
+                    this.$store.commit('setLoggedIn', true);
                     this.$router.push('/machines');
                 })
                 .catch(error => {
