@@ -12,11 +12,17 @@
             </div>
             <div class="form-group">
                 <label for="machine_os">Machine OS:</label>
-                <input v-model="queryCriteria.machine_os" id="machine_os" required />
+                <select v-model="queryCriteria.machine_os" id="product_type" required>
+                    <option v-for="(option, index) in osOptions" :key="index" :value="option.value">{{ option.label }}
+                    </option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="product_type">Product type:</label>
-                <input v-model="queryCriteria.product_type" id="product_type" required />
+                <select v-model="queryCriteria.product_type" id="product_type" required>
+                    <option v-for="(option, index) in productTypeOptions" :key="index" :value="option.value">{{ option.label }}
+                    </option>
+                </select>
             </div>
             <button type="submit">Query Events</button>
         </form>
@@ -39,6 +45,7 @@
 <script>
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { osOptions, productTypeOptions } from '@/enums.js';
 export default {
     data() {
         return {
@@ -50,6 +57,8 @@ export default {
             },
             queriedEvents: [],
             estimatedDuration: null,
+            osOptions,
+            productTypeOptions,
         };
     },
     methods: {

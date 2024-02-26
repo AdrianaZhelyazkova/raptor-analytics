@@ -9,12 +9,18 @@
 
       <div class="form-group">
         <label for="operatingSystem">Operating System:</label>
-        <input type="text" v-model="machine.os" id="operatingSystem" required>
+        <select v-model="machine.os" id="product_type" required>
+          <option v-for="(option, index) in osOptions" :key="index" :value="option.value">{{ option.label }}
+          </option>
+        </select>
       </div>
 
       <div class="form-group">
         <label for="product_type">Product Type:</label>
-        <input type="text" v-model="machine.product_type" id="product_type" required>
+        <select v-model="machine.product_type" id="product_type" required>
+          <option v-for="(option, index) in productTypeOptions" :key="index" :value="option.value">{{ option.label }}
+          </option>
+        </select>
       </div>
 
       <div v-if="!isNewMachine">
@@ -36,6 +42,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import EventDetails from './EventDetails.vue';
 import MachineEvents from './MachineEvents.vue'
+import { osOptions, productTypeOptions } from '@/enums';
 
 export default {
   components: {
@@ -52,6 +59,8 @@ export default {
       },
       isNewMachine: false,
       isModalOpen: false,
+      osOptions,
+      productTypeOptions,
     };
   },
   methods: {

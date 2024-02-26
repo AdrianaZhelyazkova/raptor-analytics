@@ -6,7 +6,11 @@
             <form @submit.prevent="addEvent">
                 <div class="form-group">
                     <label for="eventName">Event Name:</label>
-                    <input type="text" v-model="event.name" id="eventName" required>
+                    <select v-model="event.name" id="eventName" required>
+                        <option v-for="(option, index) in eventNameOptions" :key="index" :value="option.value">{{
+                            option.label }}
+                        </option>
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -33,6 +37,7 @@
 <script>
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { eventNameOptions } from '@/enums';
 
 export default {
     props: {
@@ -47,6 +52,7 @@ export default {
                 duration: null,
             },
             machineId: null,
+            eventNameOptions,
         };
     },
     methods: {
