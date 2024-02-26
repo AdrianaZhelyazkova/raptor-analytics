@@ -1,7 +1,8 @@
 <template>
     <div class="machines-container">
         <h2>Machines</h2>
-        <div class="search-bar">
+        <div v-if="machines.length > 0">
+            <div class="search-bar">
             <input type="text" v-model="searchQuery" placeholder="Search by machine name">
             <button @click="search">Search</button>
         </div>
@@ -38,6 +39,10 @@
                 </tr>
             </tbody>
         </table>
+        </div>
+        <div v-else>
+            No registered machines
+        </div>
         <button @click="registerNewMachine">Register New Machine</button>
         <router-view></router-view>
     </div>
