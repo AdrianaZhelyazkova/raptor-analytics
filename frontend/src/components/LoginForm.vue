@@ -35,8 +35,8 @@ export default {
                 .then(response => {
                     const token = response.data.token;
                     Cookies.set('auth_token', token, {expires: 1})
-                    this.$store.commit('setLoggedIn', true);
-                    this.$store.dispatch('login').then(() => {
+                    this.$store.commit('user/setLoggedIn', true);
+                    this.$store.dispatch('user/login').then(() => {
                         this.$router.push('/user-profile');
                     });
                 })

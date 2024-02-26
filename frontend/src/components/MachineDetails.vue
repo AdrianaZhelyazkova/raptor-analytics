@@ -38,8 +38,6 @@
 </template>
   
 <script>
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import EventDetails from './EventDetails.vue';
 import MachineEvents from './MachineEvents.vue'
 import { osOptions, productTypeOptions } from '@/enums';
@@ -80,53 +78,15 @@ export default {
         this.saveExistingMachine();
       }
     },
-    createNewMachine() {
-      const token = Cookies.get('auth_token');
-      const config = {
-        headers: {
-          Authorization: `Token ${token}`,
-        }
-      };
-      axios.post('http://localhost:8000/api/machines/', this.machine, config)
-        .then(response => {
-          console.log('New machine created:', response.data);
-          this.$router.push('/machines');
-        })
-        .catch(error => {
-          console.error('Error creating new machine:', error);
-        });
+    async createNewMachine() {
+      await this.$store.dispatch('machine/createMachine', this.machine);
+      this.$router.push('/machines');
     },
-    saveExistingMachine() {
-      const token = Cookies.get('auth_token');
-      const config = {
-        headers: {
-          Authorization: `Token ${token}`,
-        }
-      };
-      axios.put(`http://localhost:8000/api/machines/${this.$route.params.id}/`, this.machine, config)
-        .then(response => {
-          console.log('Machine details updated:', response.data);
-          this.$router.push('/machines');
-        })
-        .catch(error => {
-          console.error('Error updating machine details:', error);
-        });
+    async saveExistingMachine() {
+      await this.$store.dispatch('machine/updateMachine', {id:this.$route.params.id, machineData: this.machine});
     },
     async fetchMachineDetails() {
-      const token = Cookies.get('auth_token');
-      const config = {
-        headers: {
-          Authorization: `Token ${token}`,
-        }
-      };
-      await axios.get(`http://localhost:8000/api/machines/${this.$route.params.id}/`, config)
-        .then(response => {
-          this.machine = response.data;
-          console.log(this.machine)
-        })
-        .catch(error => {
-          console.error('Error fetching machine details:', error);
-        });
+      this.machine = await this.$store.getters['machine/getMachineById'](this.$route.params.id);
     },
   },
   created() {

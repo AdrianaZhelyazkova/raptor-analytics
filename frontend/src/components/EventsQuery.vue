@@ -20,13 +20,15 @@
             <div class="form-group">
                 <label for="product_type">Product type:</label>
                 <select v-model="queryCriteria.product_type" id="product_type" required>
-                    <option v-for="(option, index) in productTypeOptions" :key="index" :value="option.value">{{ option.label }}
+                    <option v-for="(option, index) in productTypeOptions" :key="index" :value="option.value">{{ option.label
+                    }}
                     </option>
                 </select>
             </div>
             <button type="submit">Query Events</button>
         </form>
         <div v-if="queriedEvents.length > 0">
+            <h3>Estimated Duration: {{ estimatedDuration }} seconds</h3>
             <h3>Queried Events</h3>
             <ul>
                 <li v-for="event in queriedEvents" :key="event.id">
@@ -34,7 +36,6 @@
                 </li>
             </ul>
 
-            <p>Estimated Duration: {{ estimatedDuration }} seconds</p>
         </div>
         <div v-else>
             <p>No events found for the given criteria.</p>
@@ -43,8 +44,6 @@
 </template>
   
 <script>
-import Cookies from 'js-cookie';
-import axios from 'axios';
 import { osOptions, productTypeOptions } from '@/enums.js';
 export default {
     data() {
@@ -63,20 +62,9 @@ export default {
     },
     methods: {
         async queryEvents() {
-            try {
-                const token = Cookies.get('auth_token');
-                const response = await axios.get('http://localhost:8000/api/events/query_events/', {
-                    params: this.queryCriteria,
-                    headers: {
-                        Authorization: `Token ${token}`,
-                    }
-                });
-
-                this.queriedEvents = response.data.queried_events;
-                this.estimatedDuration = response.data.mean_duration;
-            } catch (error) {
-                console.error('Error querying events:', error);
-            }
+            await this.$store.dispatch('event/queryEvents', this.queryCriteria);
+            this.queriedEvents = this.$store.getters['event/getQueriedEvents'];
+            this.estimatedDuration = this.$store.getters['event/getMeanDuration'];
         },
     },
 };

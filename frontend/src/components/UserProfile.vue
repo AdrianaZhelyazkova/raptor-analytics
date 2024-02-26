@@ -5,10 +5,10 @@
             <form @submit.prevent="updateUserProfile">
                 <p><strong>Email:</strong> {{ user.username }}</p>
                 <label for="first_name">First name:</label>
-                <input type="text" v-model="user.first_name" id="first_name" required>
+                <input type="text" v-model="user.first_name" id="first_name" required> <br>
 
                 <label for="last_name">Last name:</label>
-                <input type="last_name" v-model="user.last_name" id="last_name" required>
+                <input type="last_name" v-model="user.last_name" id="last_name" required> <br>
 
                 <button type="submit">Save Changes</button>
             </form>
@@ -17,41 +17,22 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Cookies from 'js-cookie';
 
 export default {
     data() {
         return {
-            user: null,
+            user: {},
         }
     },
 
     async created() {
-        await this.$store.dispatch('login');
-        this.user = this.$store.getters.getUser;
-
-        console.log(this.user)
+        this.user = this.$store.getters['user/getUser'];
     },
 
     methods: {
         updateUserProfile() {
-            const token = Cookies.get('auth_token');
-            console.log(token)
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                }
-            };
-            axios.put(`http://localhost:8000/api/users/${this.user.id}/`, this.user, config)
-                .then(response => {
-                    this.user = { ...response.data.user };
-                    alert('User profile updated successfully!');
-                })
-                .catch(error => {
-                    console.error('Error updating user profile:', error);
-                    alert('Error updating user profile. Please try again.');
-                });
+            this.$store.dispatch('user/updateUserProfile', this.user);
+            this.user = this.$store.getters['user/getUser'];
         },
     }
 };

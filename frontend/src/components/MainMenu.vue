@@ -16,24 +16,15 @@
 </template>
   
 <script>
-import axios from 'axios';
-import Cookies from 'js-cookie';
 
 export default {
     methods: {
         navigate(page) {
             this.$router.push(page);
         },
-        logout() {
-            axios.post('http://localhost:8000/api/users/logout/')
-                .then(() => {
-                    Cookies.remove('auth_token');
-                    this.$store.commit('setUser', null);
-                    this.$router.push('/');
-                })
-                .catch(error => {
-                    console.error('Error logging in user:', error);
-                });
+        async logout() {
+            await this.$store.dispatch('user/logout');
+            this.$router.push('/');
         },
     },
 };

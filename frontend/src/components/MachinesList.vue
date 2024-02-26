@@ -49,8 +49,6 @@
 </template>
   
 <script>
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import MachineEvents from './MachineEvents.vue';
 
 export default {
@@ -73,47 +71,23 @@ export default {
         viewMachineEvents(machineId) {
             this.selectedMachineId = this.selectedMachineId === machineId ? null : machineId;
         },
-        deregisterMachine(machineId) {
+        async deregisterMachine(machineId) {
             const confirmDeletion = confirm('Are you sure you want to deregister this machine?');
 
             if (confirmDeletion) {
-                const token = Cookies.get('auth_token');
-                const config = {
-                    headers: {
-                        Authorization: `Token ${token}`,
-                    }
-                };
-                axios.delete(`http://localhost:8000/api/machines/${machineId}/`, config)
-                    .then(response => {
-                        console.log('Machine deregistered:', response.data);
-                        this.fetchMachines();
-                    })
-                    .catch(error => {
-                        console.error('Error deregistering machine:', error);
-                    });
+                await this.$store.dispatch('machine/deleteMachine', machineId);
             }
         },
         registerNewMachine() {
             this.$router.push({ name: 'machine-details', params: { id: 'new' } });
         },
-        fetchMachines() {
-            const token = Cookies.get('auth_token');
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                }
-            };
-            axios.get('http://localhost:8000/api/machines/', config)
-                .then(response => {
-                    this.machines = response.data;
-                })
-                .catch(error => {
-                    console.error('Error fetching machines:', error);
-                });
+        async fetchMachines() {
+            await this.$store.dispatch('machine/fetchMachines');
+            this.machines = this.$store.getters['machine/getMachines'];
         },
     },
-    created() {
-        this.fetchMachines();
+    async created() {
+        await this.fetchMachines();
     },
 };
 </script>
@@ -141,6 +115,7 @@ td {
 
 th {
     background-color: #f2f2f2;
+    text-align: center;
 }
 
 button {
@@ -155,7 +130,6 @@ button {
 .clickable-machine-name {
     cursor: pointer;
     color: #6200ea;
-    /* Adjust the color to your preference */
     text-decoration: underline;
     font-weight: bold;
 }

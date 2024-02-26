@@ -35,8 +35,6 @@
 </template>
   
 <script>
-import Cookies from 'js-cookie';
-import axios from 'axios';
 import { eventNameOptions } from '@/enums';
 
 export default {
@@ -60,26 +58,15 @@ export default {
             this.$emit('close');
             this.resetForm();
         },
-        addEvent() {
+        async addEvent() {
             const eventData = {
                 ...this.event,
                 machine: this.$route.params.id
             };
-            const token = Cookies.get('auth_token');
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                }
-            };
-            axios.post('http://localhost:8000/api/events/', eventData, config)
-                .then(() => {
-                    this.$emit('add-event', this.event);
-                    this.closeModal()
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.closeModal();
-                })
+            
+            await this.$store.dispatch('event/createEvent', eventData);
+            this.$emit('add-event', this.event);
+            this.closeModal()
         },
         resetForm() {
             this.event = {

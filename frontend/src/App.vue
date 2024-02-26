@@ -8,7 +8,6 @@
 
 <script>
 import MainMenu from './components/MainMenu.vue';
-import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -26,9 +25,8 @@ export default {
     'main-menu': MainMenu,
   },
   computed: {
-    ...mapGetters(["getUser"]),
     isLoggedIn() {
-      return this.getUser !== null;
+      return this.$store.getters['user/getUser'] !== null;
     },
   },
 };

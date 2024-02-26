@@ -30,7 +30,6 @@
 </template>
   
 <script>
-import axios from 'axios';
 
 export default {
     data() {
@@ -45,15 +44,8 @@ export default {
     },
     methods: {
         registerUser() {
-            axios.post('http://localhost:8000/api/users/', this.userData)
-                .then(response => {
-                    console.log('User registered successfully:', response.data);
-                    this.$store.commit('setLoggedIn', true);
-                    this.$router.push('/machines');
-                })
-                .catch(error => {
-                    console.error('Error registering user:', error);
-                });
+            this.$store.dispatch('user/register', this.userData);
+            this.$router.push('/machines');
         },
     },
 };

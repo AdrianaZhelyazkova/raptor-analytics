@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import store from './store.js';
+import store from './store/store.js';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import VueRouter from 'vue-router';
@@ -44,7 +44,7 @@ new Vue({
               Authorization: `Token ${token}`,
             },
           });
-          this.$store.commit('setUser', response.data.user);
+          this.$store.commit('user/setUser', response.data.user);
         } catch (error) {
           console.error('Error fetching user information:', error);
         }
