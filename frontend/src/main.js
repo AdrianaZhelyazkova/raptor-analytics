@@ -2,7 +2,6 @@ import Vue from 'vue';
 import App from './App.vue';
 import store from './store/store.js';
 import Cookies from 'js-cookie';
-import axios from 'axios';
 import VueRouter from 'vue-router';
 import LoginForm from './components/LoginForm.vue';
 import RegisterUser from './components/RegisterUser.vue';
@@ -38,16 +37,7 @@ new Vue({
     async checkTokenOnLoad() {
       const token = Cookies.get('auth_token');
       if (token) {
-        try {
-          const response = await axios.get('http://localhost:8000/api/users/current_user/', {
-            headers: {
-              Authorization: `Token ${token}`,
-            },
-          });
-          this.$store.commit('user/setUser', response.data.user);
-        } catch (error) {
-          console.error('Error fetching user information:', error);
-        }
+        await this.$store.dispatch('user/login')
       }
     },
   },
