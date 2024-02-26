@@ -1,6 +1,5 @@
 <template>
     <div class="main-menu">
-        <div class="banner">Raptor Analytics</div>
         <ul>
             <router-link to="/machines">
                 <li>Machines</li>
@@ -29,6 +28,7 @@ export default {
             axios.post('http://localhost:8000/api/users/logout/')
                 .then(() => {
                     Cookies.remove('auth_token');
+                    this.$store.commit('setUser', null);
                     this.$router.push('/');
                 })
                 .catch(error => {

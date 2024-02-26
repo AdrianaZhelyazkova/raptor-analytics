@@ -1,16 +1,14 @@
 <template>
   <div id="app">
-    <main-menu @navigate="navigate" @logout="handleLogout"></main-menu>
+    <div class="banner">Raptor Analytics</div>
+    <main-menu v-if="isLoggedIn" @navigate="navigate"></main-menu>
     <router-view></router-view>
-    <!-- <login-form v-if="!loggedIn" @login="handleLogin" @register="handleRegister"></login-form> -->
-    <!-- <div v-else>
-      <p>Welcome, {{ email }}!</p>
-    </div> -->
   </div>
 </template>
 
 <script>
 import MainMenu from './components/MainMenu.vue';
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -20,25 +18,18 @@ export default {
     };
   },
   methods: {
-    // handleLogin() {
-    //   this.loggedIn = true;
-    //   this.email = "";
-    // },
-    // handleRegister() {
-    //   this.loggedIn = true;
-    //   this.email = "";
-    // },
-    // handleLogout() {
-    //   this.loggedIn = false;
-    //   this.email = '';
-    // },
     navigate(page) {
       alert(`Navigate to ${page}`);
     },
   },
   components: {
-    // 'login-form': LoginForm,
     'main-menu': MainMenu,
+  },
+  computed: {
+    ...mapGetters(["getUser"]),
+    isLoggedIn() {
+      return this.getUser !== null;
+    },
   },
 };
 </script>
@@ -51,5 +42,16 @@ export default {
   height: 100vh;
   background-color: #f2f2f2;
   padding: 20px;
+}
+
+.banner {
+  background-color: #9c27b0;
+  padding: 10px;
+  border-radius: 4px;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>
