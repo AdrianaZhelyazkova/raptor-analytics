@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Avg, Q
+from django.http import JsonResponse
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -50,6 +51,16 @@ class MachineViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
     
+    @action(detail=False, methods=['GET'])
+    def os_options(self, request):
+        os_choices = [choice[0] for choice in Machine.OS_CHOICES]
+        return JsonResponse(os_choices, safe=False)
+    
+    @action(detail=False, methods=['GET'])
+    def product_type_options(self, request):
+        product_type_choices = [choice[0] for choice in Machine.PRODUCT_TYPE_CHOICES]
+        return JsonResponse(product_type_choices, safe=False)
+    
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -92,3 +103,8 @@ class EventViewSet(viewsets.ModelViewSet):
         }
 
         return Response(response_data)
+    
+    @action(detail=False, methods=['GET'])
+    def name_options(self, request):
+        name_choices = [choice[0] for choice in Event.NAME_CHOICES]
+        return JsonResponse(name_choices, safe=False)

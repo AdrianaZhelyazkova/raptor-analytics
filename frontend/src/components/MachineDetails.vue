@@ -10,7 +10,7 @@
       <div class="form-group">
         <label for="operatingSystem">Operating System:</label>
         <select v-model="machine.os" id="product_type" required>
-          <option v-for="(option, index) in osOptions" :key="index" :value="option.value">{{ option.label }}
+          <option v-for="(option, index) in osOptions" :key="index" :value="option">{{ option }}
           </option>
         </select>
       </div>
@@ -18,7 +18,7 @@
       <div class="form-group">
         <label for="product_type">Product Type:</label>
         <select v-model="machine.product_type" id="product_type" required>
-          <option v-for="(option, index) in productTypeOptions" :key="index" :value="option.value">{{ option.label }}
+          <option v-for="(option, index) in productTypeOptions" :key="index" :value="option">{{ option }}
           </option>
         </select>
       </div>
@@ -40,7 +40,6 @@
 <script>
 import EventDetails from './EventDetails.vue';
 import MachineEvents from './MachineEvents.vue'
-import { osOptions, productTypeOptions } from '@/enums';
 
 export default {
   components: {
@@ -57,8 +56,8 @@ export default {
       },
       isNewMachine: false,
       isModalOpen: false,
-      osOptions,
-      productTypeOptions,
+      osOptions: [],
+      productTypeOptions: [],
     };
   },
   methods: {
@@ -91,6 +90,13 @@ export default {
     }
   },
   async created() {
+    await this.$store.dispatch('machine/fetchOsOptions');
+    await this.$store.dispatch('machine/fetchProductTypeOptions');
+
+    this.osOptions = await this.$store.getters['machine/getOsOptions'];
+    console.log(this.osOptions);
+    this.productTypeOptions = await this.$store.getters['machine/getProductTypeOptions'];
+
     this.isNewMachine = this.$route.params.id === 'new';
 
     if (!this.isNewMachine) {

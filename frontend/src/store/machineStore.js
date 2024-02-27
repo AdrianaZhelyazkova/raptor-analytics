@@ -14,6 +14,8 @@ export default {
   state: {
     machines: [],
     machine: null,
+    osOptions: [],
+    productTypeOptions: [],
   },
 
   mutations: {
@@ -23,7 +25,15 @@ export default {
 
     setCurrentMachine(state, machine) {
       state.machine = machine;
-    }
+    },
+
+    setOsOptions(state, osOptions) {
+      state.osOptions = osOptions;
+    },
+
+    setProductTypeOptions(state, productTypeOptions) {
+      state.productTypeOptions = productTypeOptions;
+    },
   },
 
   actions: {
@@ -71,6 +81,26 @@ export default {
         console.error('Error deleting machine:', error);
       }
     },
+
+    async fetchOsOptions({commit}) {
+      try {
+        const response = await axios.get('http://localhost:8000/api/machines/os_options', config);
+        commit('setOsOptions', response.data);
+      }
+      catch(error) {
+        console.error('Error getting OS options', error);
+      }
+    },
+
+    async fetchProductTypeOptions({commit}) {
+      try {
+        const response = await axios.get('http://localhost:8000/api/machines/product_type_options', config);
+        commit('setProductTypeOptions', response.data);
+      }
+      catch(error) {
+        console.error('Error getting Product type options', error);
+      }
+    },
   },
 
   getters: {
@@ -79,5 +109,7 @@ export default {
       return state.machines.find(machine => machine.id === id);
     },
     getCurrentMachine: state => state.machine,
+    getOsOptions: state => state.osOptions,
+    getProductTypeOptions: state => state.productTypeOptions,
   },
 };

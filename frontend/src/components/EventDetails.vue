@@ -7,8 +7,8 @@
                 <div class="form-group">
                     <label for="eventName">Event Name:</label>
                     <select v-model="event.name" id="eventName" required>
-                        <option v-for="(option, index) in eventNameOptions" :key="index" :value="option.value">{{
-                            option.label }}
+                        <option v-for="(option, index) in eventNameOptions" :key="index" :value="option">{{
+                            option }}
                         </option>
                     </select>
                 </div>
@@ -35,7 +35,6 @@
 </template>
   
 <script>
-import { eventNameOptions } from '@/enums';
 
 export default {
     props: {
@@ -50,7 +49,7 @@ export default {
                 duration: null,
             },
             machineId: null,
-            eventNameOptions,
+            eventNameOptions: [],
         };
     },
     methods: {
@@ -77,6 +76,11 @@ export default {
             };
             this.machineId = null;
         },
+    },
+
+    async created() {
+        await this.$store.dispatch('event/fetchEventNameOptions');
+        this.eventNameOptions = await this.$store.getters['event/getNameOptions'];
     },
 };
 </script>

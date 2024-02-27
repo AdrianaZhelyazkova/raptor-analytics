@@ -13,14 +13,14 @@
             <div class="form-group">
                 <label for="machine_os">Machine OS:</label>
                 <select v-model="queryCriteria.machine_os" id="product_type" required>
-                    <option v-for="(option, index) in osOptions" :key="index" :value="option.value">{{ option.label }}
+                    <option v-for="(option, index) in osOptions" :key="index" :value="option">{{ option }}
                     </option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="product_type">Product type:</label>
                 <select v-model="queryCriteria.product_type" id="product_type" required>
-                    <option v-for="(option, index) in productTypeOptions" :key="index" :value="option.value">{{ option.label
+                    <option v-for="(option, index) in productTypeOptions" :key="index" :value="option">{{ option
                     }}
                     </option>
                 </select>
@@ -44,7 +44,6 @@
 </template>
   
 <script>
-import { osOptions, productTypeOptions } from '@/enums.js';
 export default {
     data() {
         return {
@@ -56,8 +55,8 @@ export default {
             },
             queriedEvents: [],
             estimatedDuration: null,
-            osOptions,
-            productTypeOptions,
+            osOptions: [],
+            productTypeOptions: [],
         };
     },
     methods: {
@@ -66,6 +65,14 @@ export default {
             this.queriedEvents = this.$store.getters['event/getQueriedEvents'];
             this.estimatedDuration = this.$store.getters['event/getMeanDuration'];
         },
+    },
+
+    async created() {
+        await this.$store.dispatch('machine/fetchOsOptions');
+        await this.$store.dispatch('machine/fetchProductTypeOptions');
+
+        this.osOptions = await this.$store.getters['machine/getOsOptions'];
+        this.productTypeOptions = await this.$store.getters['machine/getProductTypeOptions'];
     },
 };
 </script>

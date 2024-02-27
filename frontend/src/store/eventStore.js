@@ -14,6 +14,7 @@ export default {
     state: {
         events: [],
         queriedEvents: [],
+        nameOptions: [],
     },
 
     mutations: {
@@ -28,6 +29,10 @@ export default {
         setMeanDuration(state, duration) {
             state.meanDuration = duration;
         },
+
+        setNameOptions(state, nameOptions) {
+            state.nameOptions = nameOptions;
+        }
     },
 
     actions: {
@@ -65,11 +70,22 @@ export default {
                 console.error('Error querying events:', error);
             }
         },
+
+        async fetchEventNameOptions({commit}) {
+            try {
+                const response = await axios.get('http://localhost:8000/api/events/name_options', config);
+                commit('setNameOptions', response.data);
+            }
+            catch(error) {
+                console.error('Error fetching event names', error);
+            }
+        }
     },
 
     getters: {
         getEvents: state => state.events,
         getQueriedEvents: state => state.queriedEvents,
         getMeanDuration: state => state.meanDuration,
+        getNameOptions: state => state.nameOptions,
     },
 }

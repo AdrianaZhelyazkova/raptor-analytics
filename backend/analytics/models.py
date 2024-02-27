@@ -4,6 +4,7 @@ class Machine(models.Model):
     OS_CHOICES = [
         ('RHEL8', 'RHEL8'),
         ('WRL7', 'WRL7'),
+        ('Solaris', 'Solaris'),
     ]
     PRODUCT_TYPE_CHOICES = [
         ('Type 1', 'Type 1'),
