@@ -8,33 +8,44 @@ import EventsQuery from './components/EventsQuery.vue';
 import UserProfile from './components/UserProfile.vue';
 import MachineDetails from './components/MachineDetails.vue';
 import NotFound from './components/NotFound.vue';
+import NotAuthorized from './components/NotAuthorized.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    beforeEnter: (to, from, next) => {
+    redirect: () => {
       const isLoggedIn = store.getters['user/isLoggedIn'];
-
-      if (isLoggedIn) {
-        next('/machines');
-      } else {
-        next('/sign-in');
-      }
+      return isLoggedIn ? '/machines' : '/sign-in';
     },
   },
   { path: '/sign-in', component: LoginForm },
   { path: '/register', component: RegisterUser },
-  { path: '/machines', component: MachinesList },
-  { path: '/events', component: EventsQuery },
-  { path: '/user-profile', component: UserProfile },
-  { path: '/machine-details/:id', name: 'machine-details', component: MachineDetails },
+  { path: '/machines', component: MachinesList,  meta: { requiresAuth: true } },
+  { path: '/events', component: EventsQuery,  meta: { requiresAuth: true } },
+  { path: '/user-profile', component: UserProfile,  meta: { requiresAuth: true } },
+  { path: '/machine-details/:id', name: 'machine-details', component: MachineDetails,  meta: { requiresAuth: true } },
+  { path: '/not-authorized', name: 'NotAuthorized', component: NotAuthorized },
   { path: '*', name: 'NotFound', component: NotFound },
 ];
 
 const router = new VueRouter({
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = store.getters['user/isLoggedIn'];
+
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+    if (!isLoggedIn) {
+      next('/not-authorized');
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
