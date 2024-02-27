@@ -72,7 +72,7 @@ export default {
             await commit('setUser', null);
             await commit('setLoggedIn', false);
         } catch (error) {
-            console.error('Error logging in user:', error);
+            console.error('Error logging out user:', error);
         }
     },
 
