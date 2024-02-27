@@ -4,7 +4,6 @@
         <div v-if="machines.length > 0">
             <div class="search-bar">
                 <input type="text" v-model="searchQuery" placeholder="Search by machine name">
-                <button @click="search">Search</button>
             </div>
             <table>
                 <thead>
@@ -17,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="machine in machines" :key="machine.id">
+                    <tr v-for="machine in filteredMachines" :key="machine.id">
                         <td @click="viewMachineDetails(machine.id)" class="clickable-machine-name">{{ machine.name }}</td>
                         <td>{{ machine.os }}</td>
                         <td>{{ machine.product_type }}</td>
@@ -91,6 +90,12 @@ export default {
         async fetchMachines() {
             await this.$store.dispatch('machine/fetchMachines');
             this.machines = await this.$store.getters['machine/getMachines'];
+        },
+    },
+    computed: {
+        filteredMachines() {
+            const query = this.searchQuery.toLowerCase();
+            return this.machines.filter(machine => machine.name.toLowerCase().includes(query));
         },
     },
     async created() {
