@@ -11,7 +11,6 @@ export default {
 
     mutations: {
         setLoggedIn(state, loggedIn) {
-            console.log(loggedIn)
             state.loggedIn = loggedIn;
         },
 
@@ -32,7 +31,7 @@ export default {
                     });
             }
             catch (error) {
-                console.log('Error loggin in user', error);
+                console.error('Error fetching user', error);
             }
 
         },

@@ -22,10 +22,10 @@ const routes = [
   },
   { path: '/sign-in', component: LoginForm },
   { path: '/register', component: RegisterUser },
-  { path: '/machines', component: MachinesList,  meta: { requiresAuth: true } },
-  { path: '/events', component: EventsQuery,  meta: { requiresAuth: true } },
-  { path: '/user-profile', component: UserProfile,  meta: { requiresAuth: true } },
-  { path: '/machine-details/:id', name: 'machine-details', component: MachineDetails,  meta: { requiresAuth: true } },
+  { path: '/machines', component: MachinesList, meta: { requiresAuth: true } },
+  { path: '/events', component: EventsQuery, meta: { requiresAuth: true } },
+  { path: '/user-profile', component: UserProfile, meta: { requiresAuth: true } },
+  { path: '/machine-details/:id', name: 'machine-details', component: MachineDetails, meta: { requiresAuth: true } },
   { path: '/not-authorized', name: 'NotAuthorized', component: NotAuthorized },
   { path: '*', name: 'NotFound', component: NotFound },
 ];
@@ -41,7 +41,12 @@ router.beforeEach(async (to, from, next) => {
     if (!isLoggedIn) {
       try {
         await store.dispatch('user/fetchCurrentUser');
-        next();
+        const user = store.getters['user/getUser']
+        if (!user.username) {
+          next('/not-authorized');
+        } else {
+          next();
+        }
       } catch (error) {
         next('/not-authorized');
       }

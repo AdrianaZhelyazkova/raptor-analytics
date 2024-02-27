@@ -44,7 +44,6 @@ export default {
     },
     methods: {
         async registerUser() {
-            console.log(this.userData.password)
             await this.$store.dispatch('user/register', this.userData);
             this.$router.push('/machines');
         },
