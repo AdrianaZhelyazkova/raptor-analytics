@@ -25,7 +25,10 @@
                             <div v-if="machine.events.length > 0">
                                 <div v-if="selectedMachineId === machine.id">
                                     <button @click="viewMachineEvents(machine.id)">Hide Events</button>
-                                    <machine-events :events="machine.events"></machine-events>
+                                    <div class="events-modal" v-show="selectedMachineId === machine.id">
+                                        <span class="close" @click="closeModal">&times;</span>
+                                        <machine-events :events="machine.events"></machine-events>
+                                    </div>
                                 </div>
                                 <span v-else>
                                     <button @click="viewMachineEvents(machine.id)">View Events</button>
@@ -70,6 +73,9 @@ export default {
         },
         viewMachineEvents(machineId) {
             this.selectedMachineId = this.selectedMachineId === machineId ? null : machineId;
+        },
+        closeModal() {
+            this.selectedMachineId = null;
         },
         async deregisterMachine(machineId) {
             const confirmDeletion = confirm('Are you sure you want to deregister this machine?');
@@ -133,5 +139,32 @@ button {
     color: #6200ea;
     text-decoration: underline;
     font-weight: bold;
+}
+
+.events-modal {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.events-modal.show-modal {
+    display: block;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
 }
 </style>

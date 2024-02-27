@@ -39,21 +39,16 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.requiresAuth) {
     if (!isLoggedIn) {
-      // User is not logged in, attempt to fetch user information
       try {
         await store.dispatch('user/fetchCurrentUser');
-        // If fetchCurrentUser is successful, continue with navigation
         next();
       } catch (error) {
-        // If there's an error (e.g., not authorized), redirect to not authorized page
         next('/not-authorized');
       }
     } else {
-      // User is already logged in, continue with navigation
       next();
     }
   } else {
-    // Route doesn't require authentication, continue with navigation
     next();
   }
 });
