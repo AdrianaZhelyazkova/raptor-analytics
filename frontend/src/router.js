@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import store from './store/store.js';
 import VueRouter from 'vue-router';
 import LoginForm from './components/LoginForm.vue';
 import RegisterUser from './components/RegisterUser.vue';
@@ -11,7 +12,19 @@ import NotFound from './components/NotFound.vue';
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: LoginForm },
+  {
+    path: '/',
+    beforeEnter: (to, from, next) => {
+      const isLoggedIn = store.getters['user/isLoggedIn'];
+
+      if (isLoggedIn) {
+        next('/machines');
+      } else {
+        next('/sign-in');
+      }
+    },
+  },
+  { path: '/sign-in', component: LoginForm },
   { path: '/register', component: RegisterUser },
   { path: '/machines', component: MachinesList },
   { path: '/events', component: EventsQuery },
