@@ -1,12 +1,4 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
-
-const token = Cookies.get('auth_token');
-      const config = {
-        headers: {
-          Authorization: `Token ${token}`,
-        }
-      };
+import { apiInstance } from '@/services/api';
       
 export default {
   namespaced: true,
@@ -39,7 +31,7 @@ export default {
   actions: {
     async fetchMachines({ commit }) {
       try {
-        const response = await axios.get('http://localhost:8000/api/machines/', config);
+        const response = await apiInstance.get('machines/');
         commit('setMachines', response.data);
       } catch (error) {
         console.error('Error fetching machines:', error);
@@ -48,7 +40,7 @@ export default {
 
     async getCurrentMachine({commit}, id){
       try {
-        const response = await axios.get(`http://localhost:8000/api/machines/${id}`, config);
+        const response = await apiInstance.get(`machines/${id}`);
         commit('setCurrentMachine', response.data);
       } catch (error) {
         console.error('Error fetching current machine:', error);
@@ -57,7 +49,7 @@ export default {
 
     async createMachine({ dispatch }, machineData) {
       try {
-        await axios.post('http://localhost:8000/api/machines/', machineData, config);
+        await apiInstance.post('machines/', machineData);
         dispatch('fetchMachines');
       } catch (error) {
         console.error('Error creating machine:', error);
@@ -66,7 +58,7 @@ export default {
 
     async updateMachine({ dispatch }, { id, machineData }) {
       try {
-        await axios.put(`http://localhost:8000/api/machines/${id}/`, machineData, config);
+        await apiInstance.put(`machines/${id}/`, machineData);
         dispatch('fetchMachines');
       } catch (error) {
         console.error('Error updating machine:', error);
@@ -75,8 +67,8 @@ export default {
 
     async deleteMachine({ dispatch }, machineId) {
       try {
-        await axios.delete(`http://localhost:8000/api/machines/${machineId}/`, config);
-        dispatch('fetchMachines');
+        await apiInstance.delete(`machines/${machineId}/`);
+        await dispatch('fetchMachines');
       } catch (error) {
         console.error('Error deleting machine:', error);
       }
@@ -84,7 +76,7 @@ export default {
 
     async fetchOsOptions({commit}) {
       try {
-        const response = await axios.get('http://localhost:8000/api/machines/os_options', config);
+        const response = await apiInstance.get('machines/os_options/');
         commit('setOsOptions', response.data);
       }
       catch(error) {
@@ -94,7 +86,7 @@ export default {
 
     async fetchProductTypeOptions({commit}) {
       try {
-        const response = await axios.get('http://localhost:8000/api/machines/product_type_options', config);
+        const response = await apiInstance.get('machines/product_type_options/');
         commit('setProductTypeOptions', response.data);
       }
       catch(error) {

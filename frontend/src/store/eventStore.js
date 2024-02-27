@@ -1,12 +1,4 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
-
-const token = Cookies.get('auth_token');
-const config = {
-    headers: {
-        Authorization: `Token ${token}`,
-    }
-};
+import { apiInstance } from '@/services/api'
 
 export default {
     namespaced: true,
@@ -38,7 +30,7 @@ export default {
     actions: {
         async fetchEvents({ commit }) {
             try {
-                const response = await axios.get('http://localhost:8000/api/events/', config);
+                const response = await apiInstance.get('events/');
                 commit('setEvents', response.data);
             } catch (error) {
                 console.error('Error fetching events:', error);
@@ -47,7 +39,7 @@ export default {
 
         async createEvent({ dispatch }, eventData) {
             try {
-                await axios.post('http://localhost:8000/api/events/', eventData, config);
+                await apiInstance.post('events/', eventData);
                 dispatch('fetchEvents');
             } catch (error) {
                 console.error('Error creating event:', error);
@@ -56,11 +48,8 @@ export default {
 
         async queryEvents({ commit }, criteria) {
             try {
-                const response = await axios.get('http://localhost:8000/api/events/query_events/', {
-                    params: criteria,
-                    headers: {
-                        Authorization: `Token ${token}`,
-                    }
+                const response = await apiInstance.get('events/query_events/', {
+                    params: criteria
                 });
                 commit('setQueriedEvents', response.data.queried_events);
                 commit('setMeanDuration', response.data.mean_duration);
@@ -71,12 +60,12 @@ export default {
             }
         },
 
-        async fetchEventNameOptions({commit}) {
+        async fetchEventNameOptions({ commit }) {
             try {
-                const response = await axios.get('http://localhost:8000/api/events/name_options', config);
+                const response = await apiInstance.get('events/name_options/');
                 commit('setNameOptions', response.data);
             }
-            catch(error) {
+            catch (error) {
                 console.error('Error fetching event names', error);
             }
         }

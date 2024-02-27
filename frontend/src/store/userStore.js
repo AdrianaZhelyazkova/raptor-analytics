@@ -1,12 +1,5 @@
+import { apiInstance } from "@/services/api";
 import Cookies from "js-cookie";
-import axios from "axios";
-
-const token = Cookies.get('auth_token');
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                }
-            };
 
 export default {
     namespaced: true,
@@ -28,7 +21,7 @@ export default {
 
     actions: {
         async login({ commit }) {
-            await axios.get('http://localhost:8000/api/users/current_user/', config)
+            await apiInstance.get('users/current_user/')
                 .then(response => {
                     console.log(response)
                     commit('setUser', response.data.user);
@@ -37,7 +30,7 @@ export default {
 
         async register({ commit }, userData) {
             try {
-                const response = await axios.post('http://localhost:8000/api/users/', userData);
+                const response = await apiInstance.post('users/', userData);
                 commit('setLoggedIn', true);
                 commit('setUser', response.data);
             }
@@ -49,7 +42,7 @@ export default {
 
         async logout({ commit }) {
             try {
-                await axios.post('http://localhost:8000/api/users/logout/')
+                await apiInstance.post('users/logout/');
                 Cookies.remove('auth_token');
                 commit('setUser', null);
             }
@@ -60,7 +53,7 @@ export default {
 
         async updateUserProfile({commit}, userProfile) {
             try {
-                const response = await axios.put(`http://localhost:8000/api/users/${userProfile.id}/`, userProfile, config)
+                const response = await apiInstance.put(`users/${userProfile.id}/`, userProfile);
                 commit('setUser',  response.data );
                 alert('User profile updated successfully!');
             }

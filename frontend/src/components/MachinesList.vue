@@ -3,42 +3,42 @@
         <h2>Machines</h2>
         <div v-if="machines.length > 0">
             <div class="search-bar">
-            <input type="text" v-model="searchQuery" placeholder="Search by machine name">
-            <button @click="search">Search</button>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Machine Name</th>
-                    <th>Operating System</th>
-                    <th>Product Type</th>
-                    <th>Events</th>
-                    <th>Deregister</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="machine in machines" :key="machine.id">
-                    <td @click="viewMachineDetails(machine.id)" class="clickable-machine-name">{{ machine.name }}</td>
-                    <td>{{ machine.os }}</td>
-                    <td>{{ machine.product_type }}</td>
-                    <td>
-                        <div v-if="machine.events.length > 0">
-                            <div v-if="selectedMachineId === machine.id">
-                                <button @click="viewMachineEvents(machine.id)">Hide Events</button>
-                                <machine-events :events="machine.events"></machine-events>
+                <input type="text" v-model="searchQuery" placeholder="Search by machine name">
+                <button @click="search">Search</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Machine Name</th>
+                        <th>Operating System</th>
+                        <th>Product Type</th>
+                        <th>Events</th>
+                        <th>Deregister</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="machine in machines" :key="machine.id">
+                        <td @click="viewMachineDetails(machine.id)" class="clickable-machine-name">{{ machine.name }}</td>
+                        <td>{{ machine.os }}</td>
+                        <td>{{ machine.product_type }}</td>
+                        <td>
+                            <div v-if="machine.events.length > 0">
+                                <div v-if="selectedMachineId === machine.id">
+                                    <button @click="viewMachineEvents(machine.id)">Hide Events</button>
+                                    <machine-events :events="machine.events"></machine-events>
+                                </div>
+                                <span v-else>
+                                    <button @click="viewMachineEvents(machine.id)">View Events</button>
+                                </span>
                             </div>
-                            <span v-else>
-                                <button @click="viewMachineEvents(machine.id)">View Events</button>
-                            </span>
-                        </div>
-                        <span v-else>No events</span>
-                    </td>
-                    <td>
-                        <button @click="deregisterMachine(machine.id)">X</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                            <span v-else>No events</span>
+                        </td>
+                        <td>
+                            <button @click="deregisterMachine(machine.id)">X</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div v-else>
             No registered machines
@@ -76,6 +76,7 @@ export default {
 
             if (confirmDeletion) {
                 await this.$store.dispatch('machine/deleteMachine', machineId);
+                this.machines = await this.$store.getters['machine/getMachines'];
             }
         },
         registerNewMachine() {
@@ -83,7 +84,7 @@ export default {
         },
         async fetchMachines() {
             await this.$store.dispatch('machine/fetchMachines');
-            this.machines = this.$store.getters['machine/getMachines'];
+            this.machines = await this.$store.getters['machine/getMachines'];
         },
     },
     async created() {
