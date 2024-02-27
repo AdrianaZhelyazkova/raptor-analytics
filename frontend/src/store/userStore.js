@@ -11,6 +11,7 @@ export default {
 
     mutations: {
         setLoggedIn(state, loggedIn) {
+            console.log(loggedIn)
             state.loggedIn = loggedIn;
         },
 
@@ -24,6 +25,9 @@ export default {
             await apiInstance.get('users/current_user/')
                 .then(response => {
                     commit('setUser', response.data.user);
+                    if(response.data.user.id) {
+                        commit('setLoggedIn', true);
+                    }
                 });
         },
 
@@ -60,7 +64,8 @@ export default {
             try {
                 await apiInstance.post('users/logout/');
                 Cookies.remove('auth_token');
-                commit('setUser', null);
+                await commit('setUser', null);
+                await commit('setLoggedIn', false);
             }
             catch (error) {
                 console.error('Error logging in user:', error);

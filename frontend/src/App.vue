@@ -10,11 +10,10 @@
 import MainMenu from './components/MainMenu.vue';
 
 export default {
-  data() {
-    return {
-      loggedIn: false,
-      email: '',
-    };
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters['user/isLoggedIn'];
+    },
   },
   methods: {
     navigate(page) {
@@ -24,15 +23,8 @@ export default {
   components: {
     'main-menu': MainMenu,
   },
-  computed: {
-    isLoggedIn() {
-      return this.$store.getters['user/getUser'] !== null;
-    },
-  },
   async created() {
-    await this.$store.dispatch('user/fetchCurrentUser').then(() => {
-    this.isLoggedIn = this.$store.getters['user/isLoggedIn']    
-    });
+    await this.$store.dispatch('user/fetchCurrentUser');
   },
 };
 </script>
