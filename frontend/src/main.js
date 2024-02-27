@@ -19,8 +19,7 @@ new Vue({
     async checkTokenOnLoad() {
       const token = Cookies.get('auth_token');
       if (token) {
-        await this.$store.dispatch('user/login')
-
+         await this.$store.dispatch('user/fetchCurrentUser');
       }
     },
   },

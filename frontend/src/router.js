@@ -34,16 +34,26 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const isLoggedIn = store.getters['user/isLoggedIn'];
 
-  if (to.matched.some(route => route.meta.requiresAuth)) {
+  if (to.meta.requiresAuth) {
     if (!isLoggedIn) {
-      next('/not-authorized');
+      // User is not logged in, attempt to fetch user information
+      try {
+        await store.dispatch('user/fetchCurrentUser');
+        // If fetchCurrentUser is successful, continue with navigation
+        next();
+      } catch (error) {
+        // If there's an error (e.g., not authorized), redirect to not authorized page
+        next('/not-authorized');
+      }
     } else {
+      // User is already logged in, continue with navigation
       next();
     }
   } else {
+    // Route doesn't require authentication, continue with navigation
     next();
   }
 });
