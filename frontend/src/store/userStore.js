@@ -49,44 +49,42 @@ export default {
                 console.error('Error logging in user:', error);
             }
         },
+        async register({ commit, dispatch }, userData) {
+            try {
+                const response = await apiInstance.post('users/', userData);
+                await dispatch('login', { username: userData.username, password: userData.password });
+                const user = response.data.user;
+
+                commit('setLoggedIn', true);
+                commit('setUser', user);
+            } catch (error) {
+                console.error('Error registering user:', error);
+            }
+        },
+
+        async logout({ commit }) {
+            try {
+                await apiInstance.post('users/logout/');
+                Cookies.remove('auth_token');
+                await commit('setUser', null);
+                await commit('setLoggedIn', false);
+            } catch (error) {
+                console.error('Error logging out user:', error);
+            }
+        },
+
+        async updateUserProfile({ commit }, userProfile) {
+            try {
+                const response = await apiInstance.put(`users/${userProfile.id}/`, userProfile);
+                commit('setUser', response.data);
+                alert('User profile updated successfully!');
+            } catch (error) {
+                console.error('Error updating user profile:', error);
+                alert('Error updating user profile. Please try again.');
+            }
+        },
 
     },
-
-    async register({ commit, dispatch }, userData) {
-        try {
-            const response = await apiInstance.post('users/', userData);
-            await dispatch('login', { username: userData.username, password: userData.password });
-            const user = response.data.user;
-
-            commit('setLoggedIn', true);
-            commit('setUser', user);
-        } catch (error) {
-            console.error('Error registering user:', error);
-        }
-    },
-
-    async logout({ commit }) {
-        try {
-            await apiInstance.post('users/logout/');
-            Cookies.remove('auth_token');
-            await commit('setUser', null);
-            await commit('setLoggedIn', false);
-        } catch (error) {
-            console.error('Error logging out user:', error);
-        }
-    },
-
-    async updateUserProfile({ commit }, userProfile) {
-        try {
-            const response = await apiInstance.put(`users/${userProfile.id}/`, userProfile);
-            commit('setUser', response.data);
-            alert('User profile updated successfully!');
-        } catch (error) {
-            console.error('Error updating user profile:', error);
-            alert('Error updating user profile. Please try again.');
-        }
-    },
-
 
     getters: {
         getUser: state => state.user,
