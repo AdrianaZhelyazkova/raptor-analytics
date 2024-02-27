@@ -1,30 +1,12 @@
 import Vue from 'vue';
 import App from './App.vue';
 import store from './store/store.js';
+import router from './router';
 import Cookies from 'js-cookie';
 import VueRouter from 'vue-router';
-import LoginForm from './components/LoginForm.vue';
-import RegisterUser from './components/RegisterUser.vue';
-import MachinesList from './components/MachinesList.vue';
-import EventsQuery from './components/EventsQuery.vue';
-import UserProfile from './components/UserProfile.vue';
-import MachineDetails from './components/MachineDetails.vue';
 
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
-
-const routes = [
-  { path: '/', component: LoginForm },
-  { path: '/register', component: RegisterUser },
-  { path: '/machines', component: MachinesList },
-  { path: '/events', component: EventsQuery },
-  { path: '/user-profile', component: UserProfile },
-  { path: '/machine-details/:id', name: 'machine-details', component: MachineDetails },
-];
-
-const router = new VueRouter({
-  routes,
-});
 
 new Vue({
   router,
@@ -38,6 +20,7 @@ new Vue({
       const token = Cookies.get('auth_token');
       if (token) {
         await this.$store.dispatch('user/login')
+
       }
     },
   },
