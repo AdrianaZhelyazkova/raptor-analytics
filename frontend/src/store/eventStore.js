@@ -64,8 +64,7 @@ export default {
             try {
                 const response = await apiInstance.get('events/name_options/');
                 commit('setNameOptions', response.data);
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error fetching event names', error);
             }
         }

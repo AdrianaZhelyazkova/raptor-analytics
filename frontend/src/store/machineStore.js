@@ -78,8 +78,7 @@ export default {
       try {
         const response = await apiInstance.get('machines/os_options/');
         commit('setOsOptions', response.data);
-      }
-      catch(error) {
+      } catch(error) {
         console.error('Error getting OS options', error);
       }
     },
@@ -88,8 +87,7 @@ export default {
       try {
         const response = await apiInstance.get('machines/product_type_options/');
         commit('setProductTypeOptions', response.data);
-      }
-      catch(error) {
+      } catch(error) {
         console.error('Error getting Product type options', error);
       }
     },
