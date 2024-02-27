@@ -75,7 +75,7 @@ export default {
 
         async updateUserProfile({ commit }, userProfile) {
             try {
-                const response = await apiInstance.put(`users/${userProfile.id}/`, userProfile);
+                const response = await apiInstance.patch(`users/${userProfile.id}/`, userProfile);
                 commit('setUser', response.data);
                 alert('User profile updated successfully!');
             } catch (error) {
