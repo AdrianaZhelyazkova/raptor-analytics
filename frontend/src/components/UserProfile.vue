@@ -26,7 +26,7 @@ export default {
     },
 
     async created() {
-        await this.$store.dispatch('user/login')
+        await this.$store.dispatch('user/fetchCurrentUser')
         this.user = await this.$store.getters['user/getUser'];
     },
 

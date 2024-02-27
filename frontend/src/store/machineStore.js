@@ -32,7 +32,7 @@ export default {
     async fetchMachines({ commit }) {
       try {
         const response = await apiInstance.get('machines/');
-        commit('setMachines', response.data);
+        await commit('setMachines', response.data);
       } catch (error) {
         console.error('Error fetching machines:', error);
       }

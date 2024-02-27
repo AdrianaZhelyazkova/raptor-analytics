@@ -17,8 +17,6 @@
 </template>
   
 <script>
-import axios from 'axios';
-import Cookies from 'js-cookie';
 
 export default {
     data() {
@@ -30,19 +28,9 @@ export default {
         };
     },
     methods: {
-        login() {
-            axios.post('http://localhost:8000/api/users/login/', this.loginData)
-                .then(response => {
-                    const token = response.data.token;
-                    Cookies.set('auth_token', token, {expires: 1})
-                    this.$store.commit('user/setLoggedIn', true);
-                    this.$store.dispatch('user/login').then(() => {
-                        this.$router.push('/user-profile');
-                    });
-                })
-                .catch(error => {
-                    console.error('Error logging in user:', error);
-                });
+        async login() {
+            await this.$store.dispatch('user/login', this.loginData);
+            this.$router.push('/machines');
         },
         register() {
             this.$router.push('/register');
