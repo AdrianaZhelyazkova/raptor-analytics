@@ -17,8 +17,8 @@ from .serializers import MachineSerializer, EventSerializer, UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
-    
+        
+        
     @action(detail=False, methods=['post'], authentication_classes=[SessionAuthentication, BasicAuthentication], permission_classes=[AllowAny])
     def login(self, request):
         username = request.data.get('username')
@@ -30,7 +30,7 @@ class UserViewSet(viewsets.ModelViewSet):
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key})
         else:
-            return Response({"error': 'Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         
         
     @action(detail=False, methods=['GET'])
@@ -99,7 +99,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
         response_data = {
             'queried_events': serializer.data,
-            'mean_duration': mean_duration,
+            'mean_duration': round(mean_duration),
         }
 
         return Response(response_data)

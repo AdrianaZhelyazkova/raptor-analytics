@@ -16,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="machine in filteredMachines" :key="machine.id">
+                    <tr v-for="machine in paginatedMachines" :key="machine.id">
                         <td @click="viewMachineDetails(machine.id)" class="clickable-machine-name">{{ machine.name }}</td>
                         <td>{{ machine.os }}</td>
                         <td>{{ machine.product_type }}</td>
@@ -41,6 +41,12 @@
                     </tr>
                 </tbody>
             </table>
+            <div v-if="machines.length > machinesPerPage" class="pagination">
+                <button class="page-button" @click="prevPage" :disabled="currentPage === 1">Previous</button>
+                <span>{{ currentPage }}</span>
+                <button class="page-button" @click="nextPage"
+                    :disabled="currentPage * machinesPerPage >= machines.length">Next</button>
+            </div>
         </div>
         <div v-else>
             No registered machines
@@ -62,6 +68,8 @@ export default {
             machines: [],
             searchQuery: '',
             selectedMachineId: null,
+            currentPage: 1,
+            machinesPerPage: 5,
         };
     },
     methods: {
@@ -91,11 +99,31 @@ export default {
             await this.$store.dispatch('machine/fetchMachines');
             this.machines = await this.$store.getters['machine/getMachines'];
         },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
+        nextPage() {
+            const lastPage = Math.ceil(this.machines.length / this.machinesPerPage);
+            if (this.currentPage < lastPage) {
+                this.currentPage++;
+            }
+        },
+        filterMachinesByName() {
+            return this.machines.filter(machine => {
+                const machineName = machine.name.toLowerCase();
+                const searchQuery = this.searchQuery.toLowerCase();
+                return machineName.includes(searchQuery);
+            })
+        },
     },
     computed: {
-        filteredMachines() {
-            const query = this.searchQuery.toLowerCase();
-            return this.machines.filter(machine => machine.name.toLowerCase().includes(query));
+        paginatedMachines() {
+            const filteredMachines = this.filterMachinesByName();
+            const startIndex = (this.currentPage - 1) * this.machinesPerPage;
+            const endIndex = startIndex + this.machinesPerPage;
+            return filteredMachines.slice(startIndex, endIndex);
         },
     },
     async created() {
@@ -171,5 +199,28 @@ button {
     right: 10px;
     font-size: 20px;
     cursor: pointer;
+}
+
+.pagination {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-button {
+    background-color: transparent;
+    border: 1px solid #9c27b0;
+    color: #9c27b0;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.page-button:hover {
+    background-color: #9c27b0;
+    color: #fff;
 }
 </style>

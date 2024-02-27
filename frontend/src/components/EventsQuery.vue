@@ -30,12 +30,30 @@
         <div v-if="queriedEvents.length > 0">
             <h3>Estimated Duration: {{ estimatedDuration }} seconds</h3>
             <h3>Queried Events</h3>
-            <ul>
-                <li v-for="event in queriedEvents" :key="event.id">
-                    {{ event.name }} - Starting Point: {{ event.starting_point }} - Final Point: {{ event.final_point }}
-                </li>
-            </ul>
-
+            <table class="events-table">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Starting Point</th>
+                        <th>Final Point</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="event in paginatedEvents" :key="event.id">
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.starting_point }}</td>
+                        <td>{{ event.final_point }}</td>
+                        <td>{{ event.duration }} seconds</td>
+                    </tr>
+                </tbody>
+                <div v-if="queriedEvents.length > eventsPerPage" class="pagination">
+                    <button class="page-button" @click="prevPage" :disabled="currentPage === 1">Previous</button>
+                    <span>{{ currentPage }}</span>
+                    <button class="page-button" @click="nextPage"
+                        :disabled="currentPage * eventsPerPage >= queriedEvents.length">Next</button>
+                </div>
+            </table>
         </div>
         <div v-else>
             <p>No events found for the given criteria.</p>
@@ -57,6 +75,8 @@ export default {
             estimatedDuration: null,
             osOptions: [],
             productTypeOptions: [],
+            currentPage: 1,
+            eventsPerPage: 5,
         };
     },
     methods: {
@@ -64,6 +84,25 @@ export default {
             await this.$store.dispatch('event/queryEvents', this.queryCriteria);
             this.queriedEvents = this.$store.getters['event/getQueriedEvents'];
             this.estimatedDuration = this.$store.getters['event/getMeanDuration'];
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
+
+        nextPage() {
+            const lastPage = Math.ceil(this.queriedEvents.length / this.eventsPerPage);
+            if (this.currentPage < lastPage) {
+                this.currentPage++;
+            }
+        },
+    },
+    computed: {
+        paginatedEvents() {
+            const startIndex = (this.currentPage - 1) * this.eventsPerPage;
+            const endIndex = startIndex + this.eventsPerPage;
+            return this.queriedEvents.slice(startIndex, endIndex);
         },
     },
 
@@ -112,5 +151,46 @@ button {
     padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.events-table th,
+.events-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.events-table th {
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.pagination {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-button {
+    background-color: transparent;
+    border: 1px solid #9c27b0;
+    color: #9c27b0;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.page-button:hover {
+    background-color: #9c27b0;
+    color: #fff;
 }
 </style>
