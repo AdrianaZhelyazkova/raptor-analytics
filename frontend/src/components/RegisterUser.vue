@@ -43,8 +43,9 @@ export default {
         };
     },
     methods: {
-        registerUser() {
-            this.$store.dispatch('user/register', this.userData);
+        async registerUser() {
+            console.log(this.userData.password)
+            await this.$store.dispatch('user/register', this.userData);
             this.$router.push('/machines');
         },
     },

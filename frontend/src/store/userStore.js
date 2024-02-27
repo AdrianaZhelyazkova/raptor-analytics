@@ -43,10 +43,10 @@ export default {
 
         },
 
-        async register({ commit }, userData) {
+        async register({ commit, dispatch }, userData) {
             try {
                 const response = await apiInstance.post('users/', userData);
-
+                await dispatch('login', {username: userData.username, password: userData.password});
                 const user = response.data.user;
 
                 commit('setLoggedIn', true);
