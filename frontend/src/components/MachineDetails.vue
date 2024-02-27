@@ -94,7 +94,6 @@ export default {
     await this.$store.dispatch('machine/fetchProductTypeOptions');
 
     this.osOptions = await this.$store.getters['machine/getOsOptions'];
-    console.log(this.osOptions);
     this.productTypeOptions = await this.$store.getters['machine/getProductTypeOptions'];
 
     this.isNewMachine = this.$route.params.id === 'new';
