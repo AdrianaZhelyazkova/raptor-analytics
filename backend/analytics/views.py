@@ -91,7 +91,7 @@ class EventViewSet(viewsets.ModelViewSet):
         queried_events = Event.objects.filter(filters)
 
         if queried_events.exists():
-            mean_duration = queried_events.aggregate(Avg('duration'))['duration__avg']
+            mean_duration = round(queried_events.aggregate(Avg('duration'))['duration__avg'])
         else:
             mean_duration = None
 
@@ -99,7 +99,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
         response_data = {
             'queried_events': serializer.data,
-            'mean_duration': round(mean_duration),
+            'mean_duration': mean_duration
         }
 
         return Response(response_data)

@@ -55,7 +55,7 @@
                 </div>
             </table>
         </div>
-        <div v-else>
+        <div v-if="queryExecuted && queriedEvents.length === 0">
             <p>No events found for the given criteria.</p>
         </div>
     </div>
@@ -75,12 +75,14 @@ export default {
             estimatedDuration: null,
             osOptions: [],
             productTypeOptions: [],
+            queryExecuted: false,
             currentPage: 1,
             eventsPerPage: 5,
         };
     },
     methods: {
         async queryEvents() {
+            this.queryExecuted = true;
             await this.$store.dispatch('event/queryEvents', this.queryCriteria);
             this.queriedEvents = this.$store.getters['event/getQueriedEvents'];
             this.estimatedDuration = this.$store.getters['event/getMeanDuration'];
