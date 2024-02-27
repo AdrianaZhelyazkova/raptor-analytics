@@ -29,6 +29,11 @@ export default {
       return this.$store.getters['user/getUser'] !== null;
     },
   },
+  async created() {
+    await this.$store.dispatch('user/fetchCurrentUser').then(() => {
+    this.isLoggedIn = this.$store.getters['user/isLoggedIn']    
+    });
+  },
 };
 </script>
 
