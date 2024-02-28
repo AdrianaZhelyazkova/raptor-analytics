@@ -84,8 +84,8 @@ export default {
         async queryEvents() {
             this.queryExecuted = true;
             await this.$store.dispatch('event/queryEvents', this.queryCriteria);
-            this.queriedEvents = this.$store.getters['event/getQueriedEvents'];
-            this.estimatedDuration = this.$store.getters['event/getMeanDuration'];
+            this.queriedEvents = await this.$store.getters['event/getQueriedEvents'];
+            this.estimatedDuration = this.$store.state.event.meanDuration;
         },
         prevPage() {
             if (this.currentPage > 1) {
