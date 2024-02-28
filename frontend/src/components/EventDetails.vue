@@ -62,7 +62,7 @@ export default {
                 ...this.event,
                 machine: this.$route.params.id
             };
-            
+
             await this.$store.dispatch('event/createEvent', eventData);
             this.$emit('add-event', this.event);
             this.closeModal()

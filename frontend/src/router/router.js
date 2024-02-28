@@ -1,14 +1,14 @@
 import Vue from 'vue';
-import store from './store/store.js';
+import store from '../store/index.js';
 import VueRouter from 'vue-router';
-import LoginForm from './components/LoginForm.vue';
-import RegisterUser from './components/RegisterUser.vue';
-import MachinesList from './components/MachinesList.vue';
-import EventsQuery from './components/EventsQuery.vue';
-import UserProfile from './components/UserProfile.vue';
-import MachineDetails from './components/MachineDetails.vue';
-import NotFound from './components/NotFound.vue';
-import NotAuthorized from './components/NotAuthorized.vue';
+import LoginForm from '../components/LoginForm.vue';
+import RegisterUser from '../components/RegisterUser.vue';
+import MachinesList from '../components/MachinesList.vue';
+import EventsQuery from '../components/EventsQuery.vue';
+import UserProfile from '../components/UserProfile.vue';
+import MachineDetails from '../components/MachineDetails.vue';
+import NotFound from '../components/NotFound.vue';
+import NotAuthorized from '../components/NotAuthorized.vue';
 
 Vue.use(VueRouter);
 

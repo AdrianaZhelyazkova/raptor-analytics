@@ -1,5 +1,5 @@
 import { apiInstance } from '@/services/api';
-      
+
 export default {
   namespaced: true,
 
@@ -38,7 +38,7 @@ export default {
       }
     },
 
-    async getCurrentMachine({commit}, id){
+    async getCurrentMachine({ commit }, id) {
       try {
         const response = await apiInstance.get(`machines/${id}`);
         commit('setCurrentMachine', response.data);
@@ -74,20 +74,20 @@ export default {
       }
     },
 
-    async fetchOsOptions({commit}) {
+    async fetchOsOptions({ commit }) {
       try {
         const response = await apiInstance.get('machines/os_options/');
         commit('setOsOptions', response.data);
-      } catch(error) {
+      } catch (error) {
         console.error('Error getting OS options', error);
       }
     },
 
-    async fetchProductTypeOptions({commit}) {
+    async fetchProductTypeOptions({ commit }) {
       try {
         const response = await apiInstance.get('machines/product_type_options/');
         commit('setProductTypeOptions', response.data);
-      } catch(error) {
+      } catch (error) {
         console.error('Error getting Product type options', error);
       }
     },

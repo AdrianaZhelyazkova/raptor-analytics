@@ -1,24 +1,24 @@
 <template>
     <div class="not-found">
-      <h2>401 - Not Authorized</h2>
-      <p>Sorry, you are not authorized to view the requested resource.</p>
-      <router-link to="/">Go to Homepage</router-link>
+        <h2>401 - Not Authorized</h2>
+        <p>Sorry, you are not authorized to view the requested resource.</p>
+        <router-link to="/">Go to Homepage</router-link>
     </div>
-  </template>
+</template>
   
-  <script>
-  export default {
+<script>
+export default {
     name: 'NotFound',
-  };
-  </script>
+};
+</script>
   
-  <style scoped>
-  .not-found {
+<style scoped>
+.not-found {
     text-align: center;
     margin: 50px;
-  }
-  
-  h2 {
+}
+
+h2 {
     color: #e53935;
-  }
-  </style>
+}
+</style>

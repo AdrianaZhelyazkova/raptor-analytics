@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import userStore from './userStore.js';
-import machineStore from './machineStore.js';
-import eventStore from './eventStore.js';
+import userStore from './modules/userStore.js';
+import machineStore from './modules/machineStore.js';
+import eventStore from './modules/eventStore.js';
 
 Vue.use(Vuex);
 

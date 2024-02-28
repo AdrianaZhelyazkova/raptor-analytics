@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
-import store from './store/store.js';
-import router from './router';
+import store from './store/index.js';
+import router from './router/router';
 import Cookies from 'js-cookie';
 import VueRouter from 'vue-router';
 
@@ -19,7 +19,7 @@ new Vue({
     async checkTokenOnLoad() {
       const token = Cookies.get('auth_token');
       if (token) {
-         await this.$store.dispatch('user/fetchCurrentUser');
+        await this.$store.dispatch('user/fetchCurrentUser');
       }
     },
   },
