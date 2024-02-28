@@ -1,16 +1,21 @@
 <template>
   <div class="machine-details">
-    <h2>{{ isNewMachine ? 'Register New Machine' : 'Edit Machine' }}</h2>
+    <h2>{{ isNewMachine ? "Register New Machine" : "Edit Machine" }}</h2>
     <form @submit.prevent="saveMachineDetails">
       <div class="form-group">
         <label for="machineName">Machine Name:</label>
-        <input type="text" v-model="machine.name" id="machineName" required>
+        <input type="text" v-model="machine.name" id="machineName" required />
       </div>
 
       <div class="form-group">
         <label for="operatingSystem">Operating System:</label>
         <select v-model="machine.os" id="product_type" required>
-          <option v-for="(option, index) in osOptions" :key="index" :value="option">{{ option }}
+          <option
+            v-for="(option, index) in osOptions"
+            :key="index"
+            :value="option"
+          >
+            {{ option }}
           </option>
         </select>
       </div>
@@ -18,28 +23,41 @@
       <div class="form-group">
         <label for="product_type">Product Type:</label>
         <select v-model="machine.product_type" id="product_type" required>
-          <option v-for="(option, index) in productTypeOptions" :key="index" :value="option">{{ option }}
+          <option
+            v-for="(option, index) in productTypeOptions"
+            :key="index"
+            :value="option"
+          >
+            {{ option }}
           </option>
         </select>
       </div>
 
       <div v-if="!isNewMachine">
-        <machine-events v-if="machine.events.length > 0" :events="machine.events" />
+        <machine-events
+          v-if="machine.events.length > 0"
+          :events="machine.events"
+        />
 
         <button type="button" @click="openModal">Add Event</button>
 
-        <event-details :is-open="isModalOpen" @close="closeModal" @add-event="handleAddEvent" />
-
+        <event-details
+          :is-open="isModalOpen"
+          @close="closeModal"
+          @add-event="handleAddEvent"
+        />
       </div>
 
-      <button type="submit">{{ isNewMachine ? 'Register Machine' : 'Save Changes' }}</button>
+      <button type="submit">
+        {{ isNewMachine ? "Register Machine" : "Save Changes" }}
+      </button>
     </form>
   </div>
 </template>
   
 <script>
-import EventDetails from './EventDetails.vue';
-import MachineEvents from './MachineEvents.vue'
+import EventDetails from "./EventDetails.vue";
+import MachineEvents from "./MachineEvents.vue";
 
 export default {
   components: {
@@ -49,9 +67,9 @@ export default {
   data() {
     return {
       machine: {
-        name: '',
-        os: '',
-        product_type: '',
+        name: "",
+        os: "",
+        product_type: "",
         events: [],
       },
       isNewMachine: false,
@@ -78,25 +96,33 @@ export default {
       }
     },
     async createNewMachine() {
-      await this.$store.dispatch('machine/createMachine', this.machine);
-      this.$router.push('/machines');
+      await this.$store.dispatch("machine/createMachine", this.machine);
+      this.$router.push("/machines");
     },
     async saveExistingMachine() {
-      await this.$store.dispatch('machine/updateMachine', { id: this.$route.params.id, machineData: this.machine });
+      await this.$store.dispatch("machine/updateMachine", {
+        id: this.$route.params.id,
+        machineData: this.machine,
+      });
     },
     async fetchMachineDetails() {
-      await this.$store.dispatch('machine/getCurrentMachine', this.$route.params.id);
-      this.machine = await this.$store.getters['machine/getCurrentMachine'];
-    }
+      await this.$store.dispatch(
+        "machine/getCurrentMachine",
+        this.$route.params.id
+      );
+      this.machine = await this.$store.getters["machine/getCurrentMachine"];
+    },
   },
   async created() {
-    await this.$store.dispatch('machine/fetchOsOptions');
-    await this.$store.dispatch('machine/fetchProductTypeOptions');
+    await this.$store.dispatch("machine/fetchOsOptions");
+    await this.$store.dispatch("machine/fetchProductTypeOptions");
 
-    this.osOptions = await this.$store.getters['machine/getOsOptions'];
-    this.productTypeOptions = await this.$store.getters['machine/getProductTypeOptions'];
+    this.osOptions = await this.$store.getters["machine/getOsOptions"];
+    this.productTypeOptions = await this.$store.getters[
+      "machine/getProductTypeOptions"
+    ];
 
-    this.isNewMachine = this.$route.params.id === 'new';
+    this.isNewMachine = this.$route.params.id === "new";
 
     if (!this.isNewMachine) {
       await this.fetchMachineDetails();

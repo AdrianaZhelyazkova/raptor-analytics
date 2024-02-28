@@ -20,9 +20,21 @@
       </tbody>
     </table>
     <div v-if="events.length > eventsPerPage" class="pagination">
-      <button class="page-button" @click="prevPage" :disabled="currentPage === 1">Previous</button>
+      <button
+        class="page-button"
+        @click="prevPage"
+        :disabled="currentPage === 1"
+      >
+        Previous
+      </button>
       <span>{{ currentPage }}</span>
-      <button class="page-button" @click="nextPage" :disabled="currentPage * eventsPerPage >= events.length">Next</button>
+      <button
+        class="page-button"
+        @click="nextPage"
+        :disabled="currentPage * eventsPerPage >= events.length"
+      >
+        Next
+      </button>
     </div>
   </div>
 </template>

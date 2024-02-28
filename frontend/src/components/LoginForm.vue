@@ -43,10 +43,9 @@ export default {
       try {
         await this.$store.dispatch("user/login", this.loginData);
         this.$router.push("/machines");
-      } catch(error) {
+      } catch (error) {
         this.errorMessage = error;
       }
-      
     },
     register() {
       this.$router.push("/register");

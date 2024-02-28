@@ -53,8 +53,6 @@ export default {
                 });
                 commit('setQueriedEvents', response.data.queried_events);
                 commit('setMeanDuration', response.data.mean_duration);
-
-
             } catch (error) {
                 console.error('Error querying events:', error);
             }

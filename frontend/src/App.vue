@@ -7,12 +7,12 @@
 </template>
 
 <script>
-import MainMenu from './components/MainMenu.vue';
+import MainMenu from "./components/MainMenu.vue";
 
 export default {
   computed: {
     isLoggedIn() {
-      return this.$store.getters['user/isLoggedIn'];
+      return this.$store.getters["user/isLoggedIn"];
     },
   },
   methods: {
@@ -21,10 +21,10 @@ export default {
     },
   },
   components: {
-    'main-menu': MainMenu,
+    "main-menu": MainMenu,
   },
   async created() {
-    await this.$store.dispatch('user/fetchCurrentUser');
+    await this.$store.dispatch("user/fetchCurrentUser");
   },
 };
 </script>
