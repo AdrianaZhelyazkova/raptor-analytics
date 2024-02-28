@@ -59,9 +59,11 @@ export default {
     async updateMachine({ dispatch }, { id, machineData }) {
       try {
         await apiInstance.put(`machines/${id}/`, machineData);
+        alert('Machine updated successfully!');
         dispatch('fetchMachines');
       } catch (error) {
         console.error('Error updating machine:', error);
+        alert('Error updating machine!');
       }
     },
 
