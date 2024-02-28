@@ -32,9 +32,6 @@
             <td>
               <div v-if="machine.events.length > 0">
                 <div v-if="selectedMachineId === machine.id">
-                  <button @click="viewMachineEvents(machine.id)">
-                    Hide Events
-                  </button>
                   <div
                     class="events-modal"
                     v-show="selectedMachineId === machine.id"
@@ -43,11 +40,9 @@
                     <machine-events :events="machine.events"></machine-events>
                   </div>
                 </div>
-                <span v-else>
-                  <button @click="viewMachineEvents(machine.id)">
-                    View Events
-                  </button>
-                </span>
+                <button @click="viewMachineEvents(machine.id)">
+                  View Events
+                </button>
               </div>
               <span v-else>No events</span>
             </td>
@@ -190,6 +185,7 @@ button {
   color: #fff;
   border: none;
   padding: 10px 15px;
+  margin-top: 10px;
   border-radius: 4px;
   cursor: pointer;
 }
