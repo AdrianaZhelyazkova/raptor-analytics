@@ -22,7 +22,7 @@ POSTGRES_PASSWORD=your-db-password
 ## Start Docker
 If you don't have Docker installed, you will need to do so. 
 
-For Windwos and MacOS users, you can download Docker Desktop from the official docker website:
+For Windows and MacOS users, you can download Docker Desktop from the official docker website:
 
 https://www.docker.com/products/docker-desktop/
 
