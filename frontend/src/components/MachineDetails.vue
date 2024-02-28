@@ -133,6 +133,8 @@ button {
   color: #fff;
   border: none;
   padding: 10px 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   border-radius: 4px;
   cursor: pointer;
 }
