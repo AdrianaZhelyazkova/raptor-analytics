@@ -64,7 +64,7 @@
         </button>
         <span>{{ currentPage }}</span>
         <button
-          v-if="currentPage * machinesPerPage <= filterMachinesByName().length"
+          v-if="currentPage * machinesPerPage < filterMachinesByName().length"
           class="page-button"
           @click="nextPage"
         >
