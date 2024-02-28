@@ -9,7 +9,7 @@
           placeholder="Search by machine name"
         />
       </div>
-      <table>
+      <table v-if="filterMachinesByName().length > 0">
         <thead>
           <tr>
             <th>Machine Name</th>
@@ -31,15 +31,13 @@
             <td>{{ machine.product_type }}</td>
             <td>
               <span class="close" @click="closeViewEventsModal">&times;</span>
+              <button @click="openAddEventModal(machine.id)">Add new</button>
               <button
                 v-if="machine.events.length > 0"
                 @click="openViewEventsModal(machine.id)"
               >
-                View Events
+                View
               </button>
-              <button @click="openAddEventModal(machine.id)">Add new</button>
-
-              
             </td>
             <td>
               <button @click="deregisterMachine(machine.id)">X</button>
@@ -47,28 +45,28 @@
           </tr>
         </tbody>
       </table>
+      <p v-else>No machines found!</p>
       <div class="events-modal" v-if="isViewEventsModalOpen">
         <span class="close" @click="closeViewEventsModal">&times;</span>
         <machine-events :events="selectedMachineEvents"></machine-events>
       </div>
       <event-details
-                :machine-id="selectedMachineId"
-                :is-open="isAddEventModalOpen"
-                @close="closeAddEventModal"
-              />
-      <div v-if="machines.length > machinesPerPage" class="pagination">
-        <button
-          class="page-button"
-          @click="prevPage"
-          :disabled="currentPage === 1"
-        >
+        :machine-id="selectedMachineId"
+        :is-open="isAddEventModalOpen"
+        @close="closeAddEventModal"
+      />
+      <div
+        v-if="filterMachinesByName().length > machinesPerPage"
+        class="pagination"
+      >
+        <button v-if="currentPage > 1" class="page-button" @click="prevPage">
           Previous
         </button>
         <span>{{ currentPage }}</span>
         <button
+          v-if="currentPage * machinesPerPage <= filterMachinesByName().length"
           class="page-button"
           @click="nextPage"
-          :disabled="currentPage * machinesPerPage >= machines.length"
         >
           Next
         </button>
@@ -112,8 +110,10 @@ export default {
       this.isViewEventsModalOpen = true;
     },
     getMachinesEventsById(machineId) {
-      console.log(machineId)
-      const machine = this.machines.find((machine) => machine.id === machineId);
+      console.log(machineId);
+      const machine = this.filterMachinesByName().find(
+        (machine) => machine.id === machineId
+      );
       return machine ? machine.events : [];
     },
     openAddEventModal(machineId) {
@@ -153,17 +153,26 @@ export default {
       }
     },
     nextPage() {
-      const lastPage = Math.ceil(this.machines.length / this.machinesPerPage);
+      const lastPage = Math.ceil(
+        this.filterMachinesByName().length / this.machinesPerPage
+      );
       if (this.currentPage < lastPage) {
         this.currentPage++;
       }
     },
     filterMachinesByName() {
-      return this.machines.filter((machine) => {
+      const filteredMachines = this.machines.filter((machine) => {
         const machineName = machine.name.toLowerCase();
         const searchQuery = this.searchQuery.toLowerCase();
         return machineName.includes(searchQuery);
       });
+      if (
+        filteredMachines.length <
+        (this.currentPage - 1) * this.machinesPerPage + 1
+      ) {
+        this.currentPage = 1;
+      }
+      return filteredMachines;
     },
   },
   computed: {
