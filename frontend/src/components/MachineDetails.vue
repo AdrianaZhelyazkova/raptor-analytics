@@ -32,6 +32,9 @@
           </option>
         </select>
       </div>
+      <button type="submit">
+        {{ isNewMachine ? "Register Machine" : "Save Changes" }}
+      </button>
 
       <div v-if="!isNewMachine">
         <machine-events
@@ -47,10 +50,6 @@
           @add-event="handleAddEvent"
         />
       </div>
-
-      <button type="submit">
-        {{ isNewMachine ? "Register Machine" : "Save Changes" }}
-      </button>
     </form>
   </div>
 </template>
