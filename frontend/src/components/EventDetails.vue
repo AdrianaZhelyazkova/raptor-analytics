@@ -57,6 +57,7 @@
 export default {
   props: {
     isOpen: Boolean,
+    machineId: String,
   },
   data() {
     return {
@@ -66,7 +67,6 @@ export default {
         final_point: "",
         duration: null,
       },
-      machineId: null,
       eventNameOptions: [],
     };
   },
@@ -78,7 +78,7 @@ export default {
     async addEvent() {
       const eventData = {
         ...this.event,
-        machine: this.$route.params.id,
+        machine: this.machineId,
       };
 
       await this.$store.dispatch("event/createEvent", eventData);
@@ -92,7 +92,6 @@ export default {
         final_point: "",
         duration: null,
       };
-      this.machineId = null;
     },
   },
 

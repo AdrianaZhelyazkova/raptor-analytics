@@ -46,6 +46,7 @@
 
         <event-details
           :is-open="isModalOpen"
+          :machineId="machine.id"
           @close="closeModal"
           @add-event="handleAddEvent"
         />

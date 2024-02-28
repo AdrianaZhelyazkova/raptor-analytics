@@ -30,21 +30,16 @@
             <td>{{ machine.os }}</td>
             <td>{{ machine.product_type }}</td>
             <td>
-              <div v-if="machine.events.length > 0">
-                <div v-if="selectedMachineId === machine.id">
-                  <div
-                    class="events-modal"
-                    v-show="selectedMachineId === machine.id"
-                  >
-                    <span class="close" @click="closeModal">&times;</span>
-                    <machine-events :events="machine.events"></machine-events>
-                  </div>
-                </div>
-                <button @click="viewMachineEvents(machine.id)">
-                  View Events
-                </button>
-              </div>
-              <span v-else>No events</span>
+              <span class="close" @click="closeViewEventsModal">&times;</span>
+              <button
+                v-if="machine.events.length > 0"
+                @click="openViewEventsModal(machine.id)"
+              >
+                View Events
+              </button>
+              <button @click="openAddEventModal(machine.id)">Add new</button>
+
+              
             </td>
             <td>
               <button @click="deregisterMachine(machine.id)">X</button>
@@ -52,6 +47,15 @@
           </tr>
         </tbody>
       </table>
+      <div class="events-modal" v-if="isViewEventsModalOpen">
+        <span class="close" @click="closeViewEventsModal">&times;</span>
+        <machine-events :events="selectedMachineEvents"></machine-events>
+      </div>
+      <event-details
+                :machine-id="selectedMachineId"
+                :is-open="isAddEventModalOpen"
+                @close="closeAddEventModal"
+              />
       <div v-if="machines.length > machinesPerPage" class="pagination">
         <button
           class="page-button"
@@ -78,18 +82,23 @@
   
 <script>
 import MachineEvents from "./MachineEvents.vue";
+import EventDetails from "./EventDetails.vue";
 
 export default {
   components: {
     MachineEvents,
+    EventDetails,
   },
   data() {
     return {
       machines: [],
       searchQuery: "",
-      selectedMachineId: null,
       currentPage: 1,
       machinesPerPage: 5,
+      selectedMachineId: null,
+      selectedMachineEvents: [],
+      isAddEventModalOpen: false,
+      isViewEventsModalOpen: false,
     };
   },
   methods: {
@@ -97,12 +106,29 @@ export default {
     viewMachineDetails(machineId) {
       this.$router.push({ name: "machine-details", params: { id: machineId } });
     },
-    viewMachineEvents(machineId) {
-      this.selectedMachineId =
-        this.selectedMachineId === machineId ? null : machineId;
+    openViewEventsModal(machineId) {
+      this.selectedMachineId = machineId;
+      this.selectedMachineEvents = this.getMachinesEventsById(machineId);
+      this.isViewEventsModalOpen = true;
     },
-    closeModal() {
+    getMachinesEventsById(machineId) {
+      console.log(machineId)
+      const machine = this.machines.find((machine) => machine.id === machineId);
+      return machine ? machine.events : [];
+    },
+    openAddEventModal(machineId) {
+      this.selectedMachineId = machineId;
+      this.isAddEventModalOpen = true;
+    },
+    closeAddEventModal() {
       this.selectedMachineId = null;
+      this.isAddEventModalOpen = null;
+      this.fetchMachines();
+    },
+    closeViewEventsModal() {
+      this.selectedMachineId = null;
+      this.selectedMachineEvents = [];
+      this.isViewEventsModalOpen = false;
     },
     async deregisterMachine(machineId) {
       const confirmDeletion = confirm(
@@ -185,7 +211,7 @@ button {
   color: #fff;
   border: none;
   padding: 10px 15px;
-  margin-top: 10px;
+  margin: 10px 3px 3px 3px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -198,6 +224,7 @@ button {
 }
 
 .events-modal {
+  background: #fff;
   display: block;
   position: fixed;
   z-index: 1;
