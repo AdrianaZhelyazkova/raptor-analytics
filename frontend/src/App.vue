@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="banner">Raptor Analytics</div>
-    <main-menu v-if="isLoggedIn" @navigate="navigate"></main-menu>
+    <main-menu v-if="isLoggedIn"></main-menu>
     <router-view></router-view>
   </div>
 </template>
@@ -13,11 +13,6 @@ export default {
   computed: {
     isLoggedIn() {
       return this.$store.getters["user/isLoggedIn"];
-    },
-  },
-  methods: {
-    navigate(page) {
-      alert(`Navigate to ${page}`);
     },
   },
   components: {
