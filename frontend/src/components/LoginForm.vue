@@ -62,6 +62,7 @@ export default {
 .login-container {
   background-color: #6a1b9a;
   padding: 20px;
+  margin-top: 15px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;

@@ -33,17 +33,9 @@ export default {
 .main-menu {
   background-color: #9c27b0;
   padding: 10px;
-  border-radius: 4px;
   width: 100%;
   margin-bottom: 20px;
   text-align: center;
-}
-
-.banner {
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
 }
 
 ul {

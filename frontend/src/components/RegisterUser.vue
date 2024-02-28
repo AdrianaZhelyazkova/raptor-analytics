@@ -39,6 +39,7 @@
 
       <div class="form-group">
         <button type="submit">Register</button>
+        <button @click="cancel">Cancel</button>
       </div>
     </form>
   </div>
@@ -61,6 +62,10 @@ export default {
       await this.$store.dispatch("user/register", this.userData);
       this.$router.push("/machines");
     },
+
+    cancel() {
+      this.$router.push("/sign-in");
+    }
   },
 };
 </script>
@@ -74,7 +79,7 @@ export default {
   text-align: center;
   color: #fff;
   width: 300px;
-  margin: 0 auto;
+  margin-top: 15px;
 }
 
 .form-group {
@@ -99,6 +104,8 @@ export default {
   color: #fff;
   border: none;
   padding: 12px 20px;
+  margin-left: 5px;
+  margin-right: 5px;
   border-radius: 4px;
   cursor: pointer;
 }

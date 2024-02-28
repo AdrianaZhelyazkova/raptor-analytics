@@ -42,7 +42,6 @@ export default {
 .banner {
   background-color: #9c27b0;
   padding: 10px;
-  border-radius: 4px;
   width: 100%;
   text-align: center;
   color: #fff;
