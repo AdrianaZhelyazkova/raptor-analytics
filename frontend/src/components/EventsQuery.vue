@@ -4,6 +4,18 @@
       <h2>Events Query</h2>
       <form @submit.prevent="queryEvents" class="query-form">
         <div class="form-group">
+          <label for="event_name">Event name:</label>
+          <select v-model="queryCriteria.event_name" id="event_name" required>
+            <option
+              v-for="(option, index) in nameOptions"
+              :key="index"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="starting_point">Starting point:</label>
           <input
             v-model="queryCriteria.starting_point"
@@ -21,7 +33,7 @@
         </div>
         <div class="form-group">
           <label for="machine_os">Machine OS:</label>
-          <select v-model="queryCriteria.machine_os" id="product_type" required>
+          <select v-model="queryCriteria.machine_os" id="machine_os" required>
             <option
               v-for="(option, index) in osOptions"
               :key="index"
@@ -100,6 +112,7 @@ export default {
   data() {
     return {
       queryCriteria: {
+        event_name: "",
         starting_point: "",
         final_point: "",
         machine_os: "",
@@ -107,6 +120,7 @@ export default {
       },
       queriedEvents: [],
       estimatedDuration: null,
+      nameOptions: [],
       osOptions: [],
       productTypeOptions: [],
       queryExecuted: false,
@@ -147,7 +161,9 @@ export default {
   async created() {
     await this.$store.dispatch("machine/fetchOsOptions");
     await this.$store.dispatch("machine/fetchProductTypeOptions");
+    await this.$store.dispatch("event/fetchEventNameOptions");
 
+    this.nameOptions = await this.$store.getters["event/getNameOptions"];
     this.osOptions = await this.$store.getters["machine/getOsOptions"];
     this.productTypeOptions = await this.$store.getters[
       "machine/getProductTypeOptions"
