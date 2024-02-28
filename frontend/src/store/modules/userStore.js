@@ -38,14 +38,20 @@ export default {
 
         async login({ commit, dispatch }, userData) {
             try {
-                const response = await apiInstance.post('users/login/', userData)
+                const response = await apiInstance.post('users/login/', userData);
                 const token = response.data.token;
-                Cookies.set('auth_token', token, { expires: 1 })
+                Cookies.set('auth_token', token, { expires: 1 });
                 await commit('setLoggedIn', true);
                 await dispatch('fetchCurrentUser');
-            }
-            catch (error) {
-                console.error('Error logging in user:', error);
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    console.error('Invalid credentials');
+                    commit('setLoggedIn', false);
+                    commit('setUser', null);
+                    throw('Invalid username or password!')
+                } else {
+                    console.error('Error logging in user:', error);
+                }
             }
         },
         async register({ commit, dispatch }, userData) {
