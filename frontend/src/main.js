@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import store from './store/index.js';
-import router from './router/router';
+import router from './router/index.js';
 import Cookies from 'js-cookie';
 import VueRouter from 'vue-router';
 

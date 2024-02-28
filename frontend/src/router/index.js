@@ -15,10 +15,11 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    redirect: () => {
+    beforeEnter: async (to, from, next) => {
+      await store.dispatch('user/fetchCurrentUser');
       const isLoggedIn = store.getters['user/isLoggedIn'];
-      return isLoggedIn ? '/machines' : '/sign-in';
-    },
+      isLoggedIn ? next('/machines') : next('/sign-in');
+    }
   },
   { path: '/sign-in', component: LoginForm },
   { path: '/register', component: RegisterUser },
