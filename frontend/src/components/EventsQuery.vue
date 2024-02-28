@@ -1,45 +1,55 @@
 <template>
-  <div class="events-query-container">
-    <h2>Events Query</h2>
-    <form @submit.prevent="queryEvents" class="query-form">
-      <div class="form-group">
-        <label for="starting_point">Starting point:</label>
-        <input
-          v-model="queryCriteria.starting_point"
-          id="starting_point"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="final_point">Final point:</label>
-        <input v-model="queryCriteria.final_point" id="final_point" required />
-      </div>
-      <div class="form-group">
-        <label for="machine_os">Machine OS:</label>
-        <select v-model="queryCriteria.machine_os" id="product_type" required>
-          <option
-            v-for="(option, index) in osOptions"
-            :key="index"
-            :value="option"
+  <div>
+    <div class="events-query-container">
+      <h2>Events Query</h2>
+      <form @submit.prevent="queryEvents" class="query-form">
+        <div class="form-group">
+          <label for="starting_point">Starting point:</label>
+          <input
+            v-model="queryCriteria.starting_point"
+            id="starting_point"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="final_point">Final point:</label>
+          <input
+            v-model="queryCriteria.final_point"
+            id="final_point"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="machine_os">Machine OS:</label>
+          <select v-model="queryCriteria.machine_os" id="product_type" required>
+            <option
+              v-for="(option, index) in osOptions"
+              :key="index"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="product_type">Product type:</label>
+          <select
+            v-model="queryCriteria.product_type"
+            id="product_type"
+            required
           >
-            {{ option }}
-          </option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="product_type">Product type:</label>
-        <select v-model="queryCriteria.product_type" id="product_type" required>
-          <option
-            v-for="(option, index) in productTypeOptions"
-            :key="index"
-            :value="option"
-          >
-            {{ option }}
-          </option>
-        </select>
-      </div>
-      <button type="submit">Query Events</button>
-    </form>
+            <option
+              v-for="(option, index) in productTypeOptions"
+              :key="index"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </div>
+        <button type="submit">Query Events</button>
+      </form>
+    </div>
     <div v-if="queriedEvents.length > 0">
       <h3>Estimated Duration: {{ estimatedDuration }} seconds</h3>
       <h3>Queried Events</h3>
@@ -148,6 +158,7 @@ export default {
   
 <style scoped>
 .events-query-container {
+  width: 200px;
   margin: 20px;
 }
 
