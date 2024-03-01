@@ -9,7 +9,7 @@ Enter the main app directory and create environment file to store env variables 
 ### .env.dev 
 ```
 DEBUG=1
-SECRET_KEY=your-db-key
+SECRET_KEY=your-django-key
 DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
 SQL_ENGINE=django.db.backends.postgresql
 SQL_HOST=postgres
